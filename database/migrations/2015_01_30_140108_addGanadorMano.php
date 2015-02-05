@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddGanadorMano extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::table('manos',function(Blueprint $table){
+            $table->tinyInteger("ganadorRondas");
+        });
+        /*Schema::table('games',function(Blueprint $table){
+            $table->integer("ganadorMano");
+        });*/
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		//
+	}
+
+}
