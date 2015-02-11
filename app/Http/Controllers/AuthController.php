@@ -6,6 +6,8 @@
  * Time: 19:53
  */
 
+namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
@@ -15,6 +17,7 @@ class AuthController  extends BaseTrucoController{
 
     public function auth()
     {
+
         // validate the info, create rules for the inputs
         $rules = array(
             'email'    => 'required|email', // make sure the email is an actual email
@@ -45,7 +48,7 @@ class AuthController  extends BaseTrucoController{
             // attempt to do the login
             if(Auth::check())
                 return Response::json(array("logged_in"=>false));
-
+            //dd($userdata);
             if (Auth::attempt($userdata)) {
 
                 // validation successful!

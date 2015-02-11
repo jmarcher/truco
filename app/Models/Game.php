@@ -36,7 +36,11 @@
  * @property boolean $cantJugadores
  * @method static \Illuminate\Database\Query\Builder|\Game whereCantJugadores($value)
  * @property integer $jugadorMano_id
- * @method static \Illuminate\Database\Query\Builder|\Game whereJugadorManoId($value) 
+ * @method static \Illuminate\Database\Query\Builder|\Game whereJugadorManoId($value)
+ * @property boolean $turnoRepartir
+ * @method static \Illuminate\Database\Query\Builder|\Game whereTurnoRepartir($value)
+ * @property boolean $seDebeRepartir 
+ * @method static \Illuminate\Database\Query\Builder|\Game whereSeDebeRepartir($value)
  */
 class Game extends Eloquent
 {
@@ -53,51 +57,51 @@ class Game extends Eloquent
      * Retorna true si el usuario fue ingresado, en caso de estar llena
      * o el usuario ya estaba ingresado retorna false
      *
-     * @param User $user
+     * @param integer $user
      * @return bool
      */
-    public function playerPosition(User $user)
+    public function playerPosition($user_id)
     {
-        if ($this->jugador1_id == $user->id) {
+        if ($this->jugador1_id == $user_id) {
             return 1;
-        } elseif ($this->jugador2_id == $user->id) {
+        } elseif ($this->jugador2_id == $user_id) {
             return 2;
-        } elseif ($this->jugador3_id == $user->id) {
+        } elseif ($this->jugador3_id == $user_id) {
             return 3;
-        } elseif ($this->jugador4_id == $user->id) {
+        } elseif ($this->jugador4_id == $user_id) {
             return 4;
-        } elseif ($this->jugador5_id == $user->id) {
+        } elseif ($this->jugador5_id == $user_id) {
             return 5;
-        } elseif ($this->jugador6_id == $user->id) {
+        } elseif ($this->jugador6_id == $user_id) {
             return 6;
         }
     }
 
-    public function insertPlayer(User $user)
+    public function insertPlayer($user_id)
     {
         if ($this->jugador2_id == NULL) {
-            if ($this->jugador1_id != $user->id) {
-                $this->jugador2_id = $user->id;
+            if ($this->jugador1_id != $user_id) {
+                $this->jugador2_id = $user_id;
                 return 2;
             }
         } elseif ($this->jugador3_id == NULL) {
-            if ($this->jugador2_id != $user->id) {
-                $this->jugador3_id = $user->id;
+            if ($this->jugador2_id != $user_id) {
+                $this->jugador3_id = $user_id;
                 return 3;
             }
         } elseif ($this->jugador4_id == NULL) {
-            if ($this->jugador3_id != $user->id) {
-                $this->jugador4_id = $user->id;
+            if ($this->jugador3_id != $user_id) {
+                $this->jugador4_id = $user_id;
                 return 4;
             }
         } elseif ($this->jugador5_id == NULL) {
-            if ($this->jugador4_id != $user->id) {
-                $this->jugador5_id = $user->id;
+            if ($this->jugador4_id != $user_id) {
+                $this->jugador5_id = $user_id;
                 return 5;
             }
         } elseif ($this->jugador6_id == NULL) {
-            if ($this->jugador5_id != $user->id) {
-                $this->jugador6_id = $user->id;
+            if ($this->jugador5_id != $user_id) {
+                $this->jugador6_id = $user_id;
                 return 6;
             }
         }
@@ -122,17 +126,17 @@ class Game extends Eloquent
 
     /**
      * Retorna si el usuario esta en la mesa
-     * @param User $user
+     * @param integer $user
      * @return bool
      */
-    public function perteneceJugador(User $user)
+    public function perteneceJugador($user_id)
     {
-        if ($this->jugador1_id == $user->id
-            || $this->jugador2_id == $user->id
-            || $this->jugador3_id == $user->id
-            || $this->jugador4_id == $user->id
-            || $this->jugador5_id == $user->id
-            || $this->jugador6_id == $user->id
+        if ($this->jugador1_id == $user_id
+            || $this->jugador2_id == $user_id
+            || $this->jugador3_id ==$user_id
+            || $this->jugador4_id == $user_id
+            || $this->jugador5_id == $user_id
+            || $this->jugador6_id == $user_id
         ) {
             return true;
         }

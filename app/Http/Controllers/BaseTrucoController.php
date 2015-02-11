@@ -1,6 +1,7 @@
 <?php
+namespace App\Http\Controllers;
 
-class BaseTrucoController extends Controller
+class BaseTrucoController extends Controlador
 {
 
     /**
@@ -53,6 +54,8 @@ class BaseTrucoController extends Controller
                 return new Error(9,"El jugador ya tiró una carta.");
             case 10:
                 return new Error(10,"No es el turno del jugador.");
+            case 11:
+                return new Error(11,"No se deben repartir las cartas.");
             default:
                 return new Error(0, "Error!");
         }

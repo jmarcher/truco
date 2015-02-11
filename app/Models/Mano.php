@@ -63,6 +63,8 @@
  * @method static \Illuminate\Database\Query\Builder|\Mano whereRonda1Id($value)
  * @method static \Illuminate\Database\Query\Builder|\Mano whereRonda2Id($value)
  * @method static \Illuminate\Database\Query\Builder|\Mano whereRonda3Id($value)
+ * @property boolean $ganadorRondas
+ * @method static \Illuminate\Database\Query\Builder|\Mano whereGanadorRondas($value)
  */
 class Mano extends Eloquent
 {

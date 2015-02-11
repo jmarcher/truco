@@ -1,10 +1,4 @@
 <?php
-
-/*
- * TODO:agregar las rondas en la mano
- * la primera ronda se agrega cuando entra el último jugador
- * EN Mano.php: Agregar un método que devuelva la última ronda, (otra o la misma basada en al fecha)
- * */
 /**
  * Created by PhpStorm.
  * User: Joaquin
@@ -14,11 +8,18 @@
  *
  * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
  */
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controlador;
+
 class GameController extends BaseTrucoController
 {
 
     public function startGame()
     {
+        
         /*
          * Cosas a hacer:
          * - Crear juego, agregar jugador al jugador
@@ -26,13 +27,14 @@ class GameController extends BaseTrucoController
          */
         //FIXME: hacer algunos controles antes para que no se creen muchas partidas al pedo.
 
-      //return Response::json( Request::user());
-        $usuarioActivo = Request::user();
+        //return Response::json( Request::user()
+        $usuarioActivo = Auth::user();
         $partida = new Game();
         $partida->jugador1_id = $usuarioActivo->id;
-        $partida->turnoRepartir = 1;
+        $partida->turnoRepartir = null;
         $partida->puntosE = 0;
         $partida->puntosN = 0;
+        $partida->seDebeRepartir=false;
         // $mano = new Mano();
         $partida->save();
         //$mano->gameId = $partida->id;
@@ -47,29 +49,15 @@ class GameController extends BaseTrucoController
     {
         try {
             $game = Game::findOrFail($id);
-            if ($game->perteneceJugador(Auth::getUser())) {
+            if ($game->perteneceJugador(Auth::id())) {
                 return Response::json(array("id" => $game->id));
             }
             if ($game->validPassword($password)) {
-                $pos = $game->insertPlayer(Auth::getUser());
+                $pos = $game->insertPlayer(Auth::id());
                 if ($pos > 0) {
-                    if ($game->cantJugadores == $pos) {
-                        $ronda = new Ronda();
-                        $mano = new Mano();
-                        $mano->gameId = $game->id;
-                        $mano->crearManoAleatoria();
-                        $mano->turno = 1;
-                        $mano->save();
-                        $game->manoId = $mano->id;
-                        //$ronda->manoId = $mano->id;
-                        $ronda->gameId = $game->id;
-                        $ronda->save();
-                        $mano->ronda1_id = $ronda->id;
-                        $mano->save();
-                        $game->rondaActual = 1;
-                        $game->manoId = $mano->id;
+                    if ($game->cantJugadores == $pos) {//ya estamos en la max cant de jugadores
+                        $game->seDebeRepartir=true; //Ahora marcamos para que se puedan repartir las cartas
                     }
-
                     $game->save();
                     return Response::json(array("id" => $game->id));
                 } else {
@@ -219,18 +207,18 @@ class GameController extends BaseTrucoController
                 "v" => $this->valor($valoresEnOrden, $enMesa['user6'])),
         );
         usort($valoresRonda, function ($a, $b) {
-                if ($a['v'] == NULL) {
-                    return 1;
-                }
-                if ($a['v'] > $b['v']) {
-                    return 1;
-                } elseif ($a['v'] < $b['v']) {
-                    return -1;
-                } elseif ($a['v'] == $b['v']) {
-                    //TODO: Controlar quien tiró primero la carta
-                    return 0;
-                }
+            if ($a['v'] == NULL) {
+                return 1;
             }
+            if ($a['v'] > $b['v']) {
+                return 1;
+            } elseif ($a['v'] < $b['v']) {
+                return -1;
+            } elseif ($a['v'] == $b['v']) {
+                //TODO: Controlar quien tiró primero la carta
+                return 0;
+            }
+        }
         );
         //dd($valoresRonda);
         //return Response::make($this->valor($valoresEnOrden,$enMesa['user1']). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user2'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user3'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user4'])) );
@@ -284,17 +272,17 @@ class GameController extends BaseTrucoController
          *  - Es su turno (opcional) OK
          */
 
-        $user = Auth::getUser();
+        $user = Auth::user();
         try {
             $game = Game::findOrFail($gameId);
-            if ($game->perteneceJugador($user)) {
+            if ($game->perteneceJugador(Auth::id())) {
                 if ($game->partidaIniciada()) {
                     /*
                      * LISTODO: Obtener la ronda actual
                      * LISTODO: que no puso una carta ya (???)
                      * LISTODO:Validar turno
                      */
-                    $posicion = $game->playerPosition(Auth::getUser());
+                    $posicion = $game->playerPosition(Auth::id());
                     $mano = Mano::find($game->manoId);
                     $ronda = $mano->ultimaRonda();
                     if ($mano->tieneCarta($posicion, $cartaId)) {
@@ -317,13 +305,19 @@ class GameController extends BaseTrucoController
                                     $mano->turno = $ganadorRonda[0]['j'];
 
                                     $nuevaRonda = new Ronda();
-                                    $nuevaRonda->manoId = $mano->id;
                                     $nuevaRonda->gameId = $game->id;
                                     $nuevaRonda->save();
-                                    if(!$mano->asignarRonda($nuevaRonda->id)){
+                                    if (!$mano->asignarRonda($nuevaRonda->id)) {
                                         //Ya no hay más rondas por jugar
                                         //FIXME: Primer ronda empate? [Agregar una ronda dummy si la primera es empate?]
-
+                                        $this->resolverGanadorMano($mano);
+                                        $game->turnoRepartir++;
+                                        if ($game->turnoRepartir > $game->cantJugadores) {
+                                            $game->turnoRepartir = 1;
+                                        }
+                                        $game->seDebeRepartir = true;
+                                        $game->manoId = null;
+                                        $game->save();
                                     }
                                 }
                                 $mano->save();
@@ -351,6 +345,46 @@ class GameController extends BaseTrucoController
         return null;
     }
 
+    /**
+     * @param Mano $mano
+     * @return array Puntos a sumar Nosotros y ellos
+     */
+    private function resolverGanadorMano(Mano $mano){
+        /*
+         *
+         */
+        $rondas = array(
+            Ronda::find($mano->ronda1_id),
+            Ronda::find($mano->ronda2_id),
+            Ronda::find($mano->ronda3_id),
+        );
+        $retorno = array(
+            "nosotros" => 0,
+            "ellos" => 0
+        );
+        /**
+            000 = sum(0) || g=0
+            001 = sum(1) || g =0
+            011 = sum(2) || g = 1
+            010 = sum(1) || g = 0
+            101 = sum(2) || g = 1
+            110 = sum(2) || g 1
+            100 = sum(1) || g=0
+            111 = sum(3) || g 1
+         */
+        $sum = 0;
+        foreach($rondas as $ronda){
+            $sum += ($ronda->ganador) % 2; //Modulo del ganador es 0 ó 1
+        }
+
+        //TODO: Que sume los puntos de los gritos
+        if($sum >= 2){//Gana el equipo 2,4,6
+            $retorno['ellos'] = 1;//Punto por haber ganado la mano
+        }else{ //Gana el equipo 1,3,5
+            $retorno['nosotros'] = 1; //Punto por haber ganado la mano
+        }
+    }
+
     public function returnGamesList()
     {
         $listaJuegos = Game::all();
@@ -372,7 +406,7 @@ class GameController extends BaseTrucoController
          */
         try {
             $game = Game::findOrFail($id);
-            if ($game->perteneceJugador(Auth::getUser())) {
+            if ($game->perteneceJugador(Auth::id())) {
                 if ($date != null) {
                     $date = new \Carbon\Carbon($date);
                 }
@@ -386,7 +420,7 @@ class GameController extends BaseTrucoController
                     $gameData['jugador5'] = User::find($game->jugador5_id);
                     $gameData['jugador6'] = User::find($game->jugador6_id);
 
-                    $playerPos = $game->playerPosition(Auth::getUser());
+                    $playerPos = $game->playerPosition(Auth::id());
                     $mano = Mano::find($game->manoId);
                     $ronda = $mano->ultimaRonda($date);
                     if ($playerPos == $mano->turno) {
@@ -421,9 +455,49 @@ class GameController extends BaseTrucoController
         }
         return Response::json($this->getError());
     }
-    
-    public function repartirCartas($id){
-        
-        return $this->returnGameData($id);
+
+    public function repartirCartas($id)
+    {
+        try {
+            $game = Game::findOrFail($id);
+            if($game->seDebeRepartir) {
+                //return Response::make($game->playerPosition(Auth::user()));
+                if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) { //Es el turno del jugador
+                    $ronda = new Ronda();
+                    $mano = new Mano();
+                    $mano->gameId = $game->id;
+                    $mano->crearManoAleatoria();
+                    $mano->turno = $game->playerPosition(Auth::user())+1;//Se le asigna al siguiente
+                    if($mano->turno > $game->cantJugadores){
+                        //Si nos pasamos de la cantidad de jugadores,
+                        //tenemos que el turno es del primero
+                        $mano->turno = 1;
+                    }
+
+                    $game->turnoRepartir++;
+                    if($game->turnoRepartir>$game->cantJugadores){
+                        $game->turnoRepartir = 1;
+                    }
+                    //$ronda->manoId = $mano->id;
+                    $ronda->gameId = $game->id;
+                    $ronda->save();
+                    $mano->ronda1_id = $ronda->id;
+                    $mano->save();
+                    $game->manoId = $mano->id;
+                    $game->rondaActual = 1;
+                    $game->manoId = $mano->id;
+                    $game->seDebeRepartir = false;
+                    $game->save();
+                    return $this->returnGameData($id);
+                } else {
+                    return Response::json($this->getError(10));
+                }
+            }else{
+                return Response::json($this->getError(11));
+            }
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $model) {
+            return Response::json($this->getError(3));
+        }
+        //return $this->returnGameData($id);
     }
 } 

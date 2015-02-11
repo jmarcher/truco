@@ -30,8 +30,6 @@ Route::get('loginGet', array('uses' => 'AuthController@auth'));
 
 Route::get('logout', array('uses' => 'AuthController@doLogout'));
 
-
-
 Route::get('register', function()
 {
     $user = new User();
@@ -42,6 +40,16 @@ Route::get('register', function()
     return "Registrado";
 });
 
+Route::get("prueba",function(){
+   return 3%3;
+});
+
+
+
+//LAS RUTAS DE ARRIBA SON DE PRUEBA
+
+//LOGIN
+Route::post('loginService', array('uses' => 'AuthController@auth'));
 
 /*
  * Game Routes

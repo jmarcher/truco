@@ -27,7 +27,9 @@ class AddGanadorMano extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::table('manos',function(Blueprint $table){
+			$table->dropColumn("ganadorRondas");
+		});
 	}
 
 }
