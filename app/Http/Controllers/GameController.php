@@ -9,10 +9,10 @@
  * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
  */
 
-namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controlador;
+use App\Http\Controllers\BaseTrucoController;
+
 
 class GameController extends BaseTrucoController
 {
@@ -31,7 +31,7 @@ class GameController extends BaseTrucoController
         $usuarioActivo = Auth::user();
         $partida = new Game();
         $partida->jugador1_id = $usuarioActivo->id;
-        $partida->turnoRepartir = null;
+        $partida->turnoRepartir = 1;
         $partida->puntosE = 0;
         $partida->puntosN = 0;
         $partida->seDebeRepartir=false;
@@ -359,18 +359,18 @@ class GameController extends BaseTrucoController
             Ronda::find($mano->ronda3_id),
         );
         $retorno = array(
-            "nosotros" => 0,
-            "ellos" => 0
+            "n" => 0,
+            "e" => 0
         );
         /**
-            000 = sum(0) || g=0
-            001 = sum(1) || g =0
-            011 = sum(2) || g = 1
-            010 = sum(1) || g = 0
-            101 = sum(2) || g = 1
-            110 = sum(2) || g 1
-            100 = sum(1) || g=0
-            111 = sum(3) || g 1
+        *    000 = sum(0) || g=0
+        *    001 = sum(1) || g =0
+        *    011 = sum(2) || g = 1
+        *    010 = sum(1) || g = 0
+        *    101 = sum(2) || g = 1
+        *    110 = sum(2) || g 1
+        *    100 = sum(1) || g=0
+        *    111 = sum(3) || g 1
          */
         $sum = 0;
         foreach($rondas as $ronda){
@@ -379,9 +379,9 @@ class GameController extends BaseTrucoController
 
         //TODO: Que sume los puntos de los gritos
         if($sum >= 2){//Gana el equipo 2,4,6
-            $retorno['ellos'] = 1;//Punto por haber ganado la mano
+            $retorno['e'] = 1;//Punto por haber ganado la mano
         }else{ //Gana el equipo 1,3,5
-            $retorno['nosotros'] = 1; //Punto por haber ganado la mano
+            $retorno['n'] = 1; //Punto por haber ganado la mano
         }
     }
 
@@ -409,6 +409,13 @@ class GameController extends BaseTrucoController
             if ($game->perteneceJugador(Auth::id())) {
                 if ($date != null) {
                     $date = new \Carbon\Carbon($date);
+                }
+                if($game->seDebeRepartir){
+                    if($game->playerPosition(Auth::id()) == $game->turnoRepartir){
+                        return Response::json(array("repartir"=>true));
+                    }else{
+                        return Response::json($this->info("Esperando que se repartan las cartas."));
+                    }
                 }
                 if ($game->rondaActual != 0) {
                     $gameData = $game;

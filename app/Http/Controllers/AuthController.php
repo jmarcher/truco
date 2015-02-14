@@ -6,9 +6,9 @@
  * Time: 19:53
  */
 
-namespace App\Http\Controllers;
+//namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseTrucoController;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;

@@ -29,10 +29,10 @@ class Foreginkey extends Migration {
 	 */
 	public function down()
 	{
-        Schema::table("rondas", function(Blueprint $table)
+      /*  Schema::table("rondas", function(Blueprint $table)
         {
             $table->dropForeign('manoId');
-        });
+        });*/
         Schema::table("games", function(Blueprint $table)
         {
             $table->dropForeign('manoId');

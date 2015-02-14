@@ -12,7 +12,7 @@ class ModificarManos extends Migration {
 	 */
 	public function up()
 	{
-        Schema::table('manos', function($table)
+        Schema::table('manos', function(Blueprint $table)
         {
             $table->timestamps();
         });
@@ -25,7 +25,10 @@ class ModificarManos extends Migration {
 	 */
 	public function down()
 	{
-		//
+        Schema::table('manos', function(Blueprint $table)
+        {
+            $table->dropTimestamps();
+        });
 	}
 
 }

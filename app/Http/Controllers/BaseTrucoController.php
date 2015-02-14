@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Error;
+
 class BaseTrucoController extends Controlador
 {
 

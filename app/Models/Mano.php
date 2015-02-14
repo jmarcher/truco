@@ -74,8 +74,9 @@ class Mano extends Eloquent
      */
     protected $table = "manos";
 
+
     private function darUnaCarta(&$sorteados)
-    {
+    {//FIXME: Performance mejorable
         $candidato = mt_rand(1, 40);
         if (in_array($candidato, $sorteados)) {
             return $this->darUnaCarta($sorteados);

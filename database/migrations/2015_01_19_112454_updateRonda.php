@@ -30,7 +30,15 @@ class UpdateRonda extends Migration {
 	 */
 	public function down()
 	{
-		//
+        Schema::table("rondas", function(Blueprint $table) {
+            $table->dropColumn("ganador");
+        });
+        Schema::table("manos", function(Blueprint $table) {
+            $table->dropColumn("turno");
+        });
+        Schema::table("games", function(Blueprint $table) {
+            $table->dropColumn("cantJugadores")->default(2);
+        });
 	}
 
 }

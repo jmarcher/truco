@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.0.2 on 2015-02-11.
+ * Generated for Laravel 5.0.5 on 2015-02-13.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -940,7 +940,7 @@ namespace {
          */
         public static function handle($input, $output = null){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \Truco\Console\Kernel::handle($input, $output);
+            return \App\Console\Kernel::handle($input, $output);
         }
         
         /**
@@ -953,7 +953,7 @@ namespace {
          */
         public static function terminate($input, $status){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            \Truco\Console\Kernel::terminate($input, $status);
+            \App\Console\Kernel::terminate($input, $status);
         }
         
         /**
@@ -966,7 +966,7 @@ namespace {
          */
         public static function call($command, $parameters = array()){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \Truco\Console\Kernel::call($command, $parameters);
+            return \App\Console\Kernel::call($command, $parameters);
         }
         
         /**
@@ -979,7 +979,7 @@ namespace {
          */
         public static function queue($command, $parameters = array()){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            \Truco\Console\Kernel::queue($command, $parameters);
+            \App\Console\Kernel::queue($command, $parameters);
         }
         
         /**
@@ -990,7 +990,7 @@ namespace {
          */
         public static function all(){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \Truco\Console\Kernel::all();
+            return \App\Console\Kernel::all();
         }
         
         /**
@@ -1001,7 +1001,7 @@ namespace {
          */
         public static function output(){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \Truco\Console\Kernel::output();
+            return \App\Console\Kernel::output();
         }
         
         /**
@@ -1012,7 +1012,7 @@ namespace {
          */
         public static function bootstrap(){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            \Truco\Console\Kernel::bootstrap();
+            \App\Console\Kernel::bootstrap();
         }
         
     }
@@ -5008,7 +5008,7 @@ namespace {
         }
         
         /**
-         * Set the default passwork work factor.
+         * Set the default password work factor.
          *
          * @param int $rounds
          * @return $this 
@@ -9702,7 +9702,7 @@ namespace {
         }
         
         /**
-         * Call the given route's before filters.
+         * Call the given route's after filters.
          *
          * @param \Illuminate\Routing\Route $route
          * @param \Illuminate\Http\Request $request

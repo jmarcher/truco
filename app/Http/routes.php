@@ -13,10 +13,6 @@
 
 Route::pattern('id', '[0-9]+');//Cualquier parametro llamado "id" tiene que ser numérico
 
-Route::get('/', array('before' =>  'auth', function()
-{
-	return View::make('hello');
-}));
 
 Route::get('auth/required',function(){
     return Response::json(array("info"=>"Tienes que estar logueado."));
@@ -64,4 +60,5 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('returnGameData/{id}/{date?}', array('uses' => 'GameController@returnGameData'));
     Route::get('ponerCarta/{id}/{cartaId}', array('uses' => 'GameController@ponerCarta'));
     Route::get('repartirCartas/{id}',array('uses' => 'GameController@repartirCartas'));
+    Route::get('gritar/{id}/{grito}',array('uses' => 'GameController@gritar'));
 });

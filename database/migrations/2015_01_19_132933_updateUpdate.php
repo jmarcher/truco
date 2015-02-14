@@ -24,7 +24,9 @@ class UpdateUpdate extends Migration {
 	 */
 	public function down()
 	{
-		//
+        Schema::table("rondas", function(Blueprint $table) {
+            $table->dropTimestamps();
+        });
 	}
 
 }
