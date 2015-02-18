@@ -19,15 +19,13 @@ class GameController extends BaseTrucoController
 
     public function startGame()
     {
-        
+        //Debugbar::error('Error!');
         /*
          * Cosas a hacer:
          * - Crear juego, agregar jugador al jugador
          * - Retorna el id de la partida
          */
         //FIXME: hacer algunos controles antes para que no se creen muchas partidas al pedo.
-
-        //return Response::json( Request::user()
         $usuarioActivo = Auth::user();
         $partida = new Game();
         $partida->jugador1_id = $usuarioActivo->id;
@@ -35,13 +33,8 @@ class GameController extends BaseTrucoController
         $partida->puntosE = 0;
         $partida->puntosN = 0;
         $partida->seDebeRepartir=false;
-        // $mano = new Mano();
         $partida->save();
-        //$mano->gameId = $partida->id;
-        //return Response::json($partida);
 
-        //$partida->manoId = $mano->id;
-        //$partida->save();
         return Response::json(array("partida" => array("id" => $partida['id'])));
     }
 
@@ -207,18 +200,19 @@ class GameController extends BaseTrucoController
                 "v" => $this->valor($valoresEnOrden, $enMesa['user6'])),
         );
         usort($valoresRonda, function ($a, $b) {
-            if ($a['v'] == NULL) {
-                return 1;
-            }
-            if ($a['v'] > $b['v']) {
-                return 1;
-            } elseif ($a['v'] < $b['v']) {
-                return -1;
-            } elseif ($a['v'] == $b['v']) {
+                if ($a['v'] == NULL) {
+                    return 1;
+                }
+                if ($a['v'] > $b['v']) {
+                    return 1;
+                } elseif ($a['v'] < $b['v']) {
+                    return -1;
+                }
+
                 //TODO: Controlar quien tiró primero la carta
                 return 0;
+
             }
-        }
         );
         //dd($valoresRonda);
         //return Response::make($this->valor($valoresEnOrden,$enMesa['user1']). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user2'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user3'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user4'])) );
@@ -506,5 +500,28 @@ class GameController extends BaseTrucoController
             return Response::json($this->getError(3));
         }
         //return $this->returnGameData($id);
+    }
+
+    public function gritar($id, $grito){
+        /**
+         * TODO:
+         * Verificar que tiene la palabra
+         * Pasar la palabra al otro equipo (u otro jugador?)
+         * No querer?????
+         * Flor???? automaticamente gritada? u opción de decir envido antes.
+         */
+        try{
+            $game = Game::findOrFail($id);
+
+            if($game->perteneceJugador(Auth::id())){
+
+            }else{
+                return Response::json($this->getError(4));
+            }
+
+        }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $model){
+            return Response::json($this->getError(3));
+        }
+        return null;
     }
 } 

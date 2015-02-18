@@ -65,6 +65,20 @@
  * @method static \Illuminate\Database\Query\Builder|\Mano whereRonda3Id($value)
  * @property boolean $ganadorRondas
  * @method static \Illuminate\Database\Query\Builder|\Mano whereGanadorRondas($value)
+ * @property boolean $tieneLaPalabra
+ * @property boolean $puntosEnvido
+ * @property boolean $noQuisoEnvido
+ * @property string $flores
+ * @property boolean $alguienTieneFlor
+ * @property boolean $puntosTruco
+ * @property boolean $noQuisoTruco
+ * @method static \Illuminate\Database\Query\Builder|\Mano whereTieneLaPalabra($value)
+ * @method static \Illuminate\Database\Query\Builder|\Mano wherePuntosEnvido($value)
+ * @method static \Illuminate\Database\Query\Builder|\Mano whereNoQuisoEnvido($value)
+ * @method static \Illuminate\Database\Query\Builder|\Mano whereFlores($value)
+ * @method static \Illuminate\Database\Query\Builder|\Mano whereAlguienTieneFlor($value)
+ * @method static \Illuminate\Database\Query\Builder|\Mano wherePuntosTruco($value)
+ * @method static \Illuminate\Database\Query\Builder|\Mano whereNoQuisoTruco($value)
  */
 class Mano extends Eloquent
 {
@@ -76,7 +90,7 @@ class Mano extends Eloquent
 
 
     private function darUnaCarta(&$sorteados)
-    {//FIXME: Performance mejorable
+    {//Probado, la performanceno cambia
         $candidato = mt_rand(1, 40);
         if (in_array($candidato, $sorteados)) {
             return $this->darUnaCarta($sorteados);
@@ -85,6 +99,7 @@ class Mano extends Eloquent
             return $candidato;
         }
     }
+
 
     public function crearManoAleatoria()
     {
@@ -122,9 +137,9 @@ class Mano extends Eloquent
             return array($this->carta_A_jugador4, $this->carta_B_jugador4, $this->carta_C_jugador4);
         } elseif ($jugador == 5) {
             return array($this->carta_A_jugador5, $this->carta_B_jugador5, $this->carta_C_jugador5);
-        } elseif ($jugador == 6) {
-            return array($this->carta_A_jugador6, $this->carta_B_jugador6, $this->carta_C_jugador6);
         }
+
+        return array($this->carta_A_jugador6, $this->carta_B_jugador6, $this->carta_C_jugador6);
     }
 
     /**
@@ -159,6 +174,10 @@ class Mano extends Eloquent
         return false;
     }
 
+    /**
+     * @param \Carbon\Carbon $date
+     * @return Ronda
+     */
     public function ultimaRonda(Carbon\Carbon $date = NULL)
     {//FIXME:Si la fecha es igual no descaga novedades
         if ($date != NULL) {
@@ -197,5 +216,15 @@ class Mano extends Eloquent
                 return Ronda::find($this->ronda3_id);
             }
         }
+    }
+
+    /**
+     * Para preguntar sie l jugador tiene la palabra o no.
+     *
+     * @param int $used_id
+     * @return bool Si el jugador tiene la palabra o no
+     */
+    public function tieneLaPalabra($used_id){
+
     }
 } 

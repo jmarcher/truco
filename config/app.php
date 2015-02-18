@@ -110,6 +110,8 @@ return [
 
 	'providers' => [
 
+
+
 		/*
 		 * Laravel Framework Service Providers...
 		 */
@@ -136,6 +138,7 @@ return [
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 
+        'Barryvdh\Debugbar\ServiceProvider',
 		/*
 		 * Application Service Providers...
 		 */
@@ -149,6 +152,7 @@ return [
          * Third party software
          */
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+
 
 	],
 
@@ -197,6 +201,7 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+        'Debugbar' => 'Barryvdh\Debugbar\Facade',
 
 	],
 

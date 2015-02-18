@@ -37,7 +37,14 @@ Route::get('register', function()
 });
 
 Route::get("prueba",function(){
-   return 3%3;
+    $time_start = microtime(true);
+   for($i=1;$i<=10000;$i++){
+       $mano =  new Mano();
+       $mano->crearManoAleatoria();
+   }
+    $time_end = microtime(true);
+    $time = $time_end - $time_start;
+    return "Esto paso en: ".$time." segundos.";
 });
 
 

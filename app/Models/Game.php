@@ -39,7 +39,7 @@
  * @method static \Illuminate\Database\Query\Builder|\Game whereJugadorManoId($value)
  * @property boolean $turnoRepartir
  * @method static \Illuminate\Database\Query\Builder|\Game whereTurnoRepartir($value)
- * @property boolean $seDebeRepartir 
+ * @property boolean $seDebeRepartir
  * @method static \Illuminate\Database\Query\Builder|\Game whereSeDebeRepartir($value)
  */
 class Game extends Eloquent
@@ -54,6 +54,7 @@ class Game extends Eloquent
 
 
     /**
+     *
      * Retorna true si el usuario fue ingresado, en caso de estar llena
      * o el usuario ya estaba ingresado retorna false
      *
@@ -72,9 +73,8 @@ class Game extends Eloquent
             return 4;
         } elseif ($this->jugador5_id == $user_id) {
             return 5;
-        } elseif ($this->jugador6_id == $user_id) {
-            return 6;
         }
+        return 6;
     }
 
     public function insertPlayer($user_id)
@@ -152,4 +152,6 @@ class Game extends Eloquent
     {
         return $this->rondaActual > 0;
     }
+
+
 }
