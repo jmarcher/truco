@@ -14,8 +14,8 @@
 Route::pattern('id', '[0-9]+');//Cualquier parametro llamado "id" tiene que ser numérico
 
 
-Route::get('auth/required',function(){
-    return Response::json(array("info"=>"Tienes que estar logueado."));
+Route::get('auth/required', function () {
+    return Response::json(array("info" => "Tienes que estar logueado."));
 });
 
 // route to show the login form
@@ -26,8 +26,7 @@ Route::get('loginGet', array('uses' => 'AuthController@auth'));
 
 Route::get('logout', array('uses' => 'AuthController@doLogout'));
 
-Route::get('register', function()
-{
+Route::get('register', function () {
     $user = new User();
     $user->email = "diego@gmail.com";
     $user->password = Hash::make("pass");
@@ -36,17 +35,16 @@ Route::get('register', function()
     return "Registrado";
 });
 
-Route::get("prueba",function(){
+Route::get("prueba", function () {
     $time_start = microtime(true);
-   for($i=1;$i<=10000;$i++){
-       $mano =  new Mano();
-       $mano->crearManoAleatoria();
-   }
+    for ($i = 1; $i <= 10000; $i++) {
+        $mano = new Mano();
+        $mano->crearManoAleatoria();
+    }
     $time_end = microtime(true);
     $time = $time_end - $time_start;
-    return "Esto paso en: ".$time." segundos.";
+    return "Esto paso en: " . $time . " segundos.";
 });
-
 
 
 //LAS RUTAS DE ARRIBA SON DE PRUEBA
@@ -59,13 +57,13 @@ Route::post('loginService', array('uses' => 'AuthController@auth'));
  */
 
 //Routes que necesitan auth
-Route::group(['middleware'=>'auth'], function() {
-    Route::get('startGame', array('uses' => 'GameController@startGame'));
-    Route::get('joinGame/{id}/{password?}', array('uses' => 'GameController@joinGame'));
-    Route::get('resolveWinner/{id}', array('uses' => 'GameController@resolverGanadorRonda'));
-    Route::get('listaJuegos', array('uses' => 'GameController@returnGamesList'));
-    Route::get('returnGameData/{id}/{date?}', array('uses' => 'GameController@returnGameData'));
-    Route::get('ponerCarta/{id}/{cartaId}', array('uses' => 'GameController@ponerCarta'));
-    Route::get('repartirCartas/{id}',array('uses' => 'GameController@repartirCartas'));
-    Route::get('gritar/{id}/{grito}',array('uses' => 'GameController@gritar'));
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('startGame', 'GameController@startGame');
+    Route::get('joinGame/{id}/{password?}', 'GameController@joinGame');
+    Route::get('resolveWinner/{id}', 'GameController@resolverGanadorRonda');
+    Route::get('listaJuegos', 'GameController@returnGamesList');
+    Route::get('returnGameData/{id}/{date?}', 'GameController@returnGameData');
+    Route::get('ponerCarta/{id}/{cartaId}', 'GameController@ponerCarta');
+    Route::get('repartirCartas/{id}', 'GameController@repartirCartas');
+    Route::get('gritar/{id}/{grito}', 'GameController@gritar');
 });

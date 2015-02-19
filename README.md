@@ -1,3 +1,5 @@
+[![License](https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+
 # Truco online opensource
 
 Este es el proyecto de truco online opensource.
@@ -29,6 +31,7 @@ Listo, ahora si queremos probar la API, se puede correr el servidor de prueba:
 ```sh
 $ php artisan serve
 ```
+
 
 
 
