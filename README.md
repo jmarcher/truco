@@ -15,7 +15,15 @@ Este sistema se basa en el framework [Laravel], para más información puede vis
 
 ###Instalación
 
-En la carpeta donde esten bajados los archivos, correr el comando:
+Es necesario tener instalado [composer] para poder bajar las dependencias de la aplicación, una vez que se tiene [composer], ejecutar el siguiente comando:
+
+```sh
+$ composer update
+```
+
+Este comando bajará todos los archivos que se necesitan automáticamente.
+
+En la carpeta donde estén bajados los archivos, correr el comando:
 
 ```sh
 $ php artisan migrate
@@ -36,3 +44,4 @@ $ php artisan serve
 
 
 [Laravel]:http://laravel.com
+[composer]:http://getcomposer.org
