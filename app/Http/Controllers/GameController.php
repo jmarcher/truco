@@ -1,4 +1,4 @@
-<?php
+<?php namespace App\Http\Controllers;
 /**
  * Created by PhpStorm.
  * User: Joaquin
@@ -10,8 +10,13 @@
  */
 
 
+use App\Carta;
+use App\Game;
 use App\Http\Requests;
-use App\Http\Controllers\BaseTrucoController;
+use App\Mano;
+use App\Ronda;
+use Auth;
+use \Illuminate\Support\Facades\Response;
 
 
 class GameController extends BaseTrucoController
@@ -26,6 +31,7 @@ class GameController extends BaseTrucoController
          * - Retorna el id de la partida
          */
         //FIXME: hacer algunos controles antes para que no se creen muchas partidas al pedo.
+
         $usuarioActivo = Auth::user();
         $partida = new Game();
         $partida->jugador1_id = $usuarioActivo->id;
@@ -35,6 +41,7 @@ class GameController extends BaseTrucoController
         $partida->seDebeRepartir=false;
         $partida->save();
 
+        debug($partida);
         return Response::json(array("partida" => array("id" => $partida['id'])));
     }
 
@@ -505,16 +512,21 @@ class GameController extends BaseTrucoController
     public function gritar($id, $grito){
         /**
          * TODO:
-         * Verificar que tiene la palabra
+         * Verificar que tiene la palabra    OK
          * Pasar la palabra al otro equipo (u otro jugador?)
+         * Comprobar que lo que grita no fue gritado ya (excepto el envido)
          * No querer?????
-         * Flor???? automaticamente gritada? u opción de decir envido antes.
+         * Flor???? automáticamente gritada? u opción de decir envido antes.
          */
         try{
             $game = Game::findOrFail($id);
-
             if($game->perteneceJugador(Auth::id())){
+                $mano = Mano::find($game->manoId);
+                if($mano->tieneLaPalabra(Auth::id())){
 
+                }else{
+                    return Response::json($this->info("No tiene la palabra"));
+                }
             }else{
                 return Response::json($this->getError(4));
             }

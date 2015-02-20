@@ -14,6 +14,10 @@
 Route::pattern('id', '[0-9]+');//Cualquier parametro llamado "id" tiene que ser numérico
 
 
+Route::get('/', 'WelcomeController@index');
+Route::get('home', 'HomeController@index');
+
+
 Route::get('auth/required', function () {
     return Response::json(array("info" => "Tienes que estar logueado."));
 });
@@ -24,7 +28,7 @@ Route::get('login', array('uses' => 'AuthController@showLogin'));
 // route to process the form
 Route::get('loginGet', array('uses' => 'AuthController@auth'));
 
-Route::get('logout', array('uses' => 'AuthController@doLogout'));
+Route::get('logout','AuthController@doLogout');
 
 Route::get('register', function () {
     $user = new User();
@@ -67,3 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('repartirCartas/{id}', 'GameController@repartirCartas');
     Route::get('gritar/{id}/{grito}', 'GameController@gritar');
 });
+/*
+Route::controllers([
+    'auth' => 'AuthController',
+   // 'password' => 'Auth\PasswordController',
+]);*/

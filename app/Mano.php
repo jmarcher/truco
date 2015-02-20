@@ -1,8 +1,10 @@
-<?php
+<?php namespace App;
+
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Created by PhpStorm.
- * 
+ *
  * User: Joaquin
  * Date: 17.07.14
  * Time: 22:08
@@ -79,8 +81,9 @@
  * @method static \Illuminate\Database\Query\Builder|\Mano whereAlguienTieneFlor($value)
  * @method static \Illuminate\Database\Query\Builder|\Mano wherePuntosTruco($value)
  * @method static \Illuminate\Database\Query\Builder|\Mano whereNoQuisoTruco($value)
+ * @method static \App\Mano find($id,$columns = array('*'))
  */
-class Mano extends Eloquent
+class Mano extends Model
 {
 
     /**

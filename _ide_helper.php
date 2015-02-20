@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.0.5 on 2015-02-18.
+ * Generated for Laravel 5.0.6 on 2015-02-20.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -31,6 +31,41 @@ namespace {
          */
         public static function bootstrapWith($bootstrappers){
             \Illuminate\Foundation\Application::bootstrapWith($bootstrappers);
+        }
+        
+        /**
+         * Register a callback to run after loading the environment.
+         *
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */
+        public static function afterLoadingEnvironment($callback){
+            \Illuminate\Foundation\Application::afterLoadingEnvironment($callback);
+        }
+        
+        /**
+         * Register a callback to run after a bootstrapper.
+         *
+         * @param string $bootstrapper
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */
+        public static function beforeBootstrapping($bootstrapper, $callback){
+            \Illuminate\Foundation\Application::beforeBootstrapping($bootstrapper, $callback);
+        }
+        
+        /**
+         * Register a callback to run after a bootstrapper.
+         *
+         * @param string $bootstrapper
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */
+        public static function afterBootstrapping($bootstrapper, $callback){
+            \Illuminate\Foundation\Application::afterBootstrapping($bootstrapper, $callback);
         }
         
         /**
@@ -10840,6 +10875,7 @@ namespace {
          * @param mixed $parameters
          * @param bool $absolute
          * @return string 
+         * @throws \InvalidArgumentException
          * @static 
          */
         public static function action($action, $parameters = array(), $absolute = true){

@@ -1,9 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\Http\Controllers\BaseTrucoController;
-
-use Illuminate\Http\Request;
 
 class TorneoController extends BaseTrucoController {
 

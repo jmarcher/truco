@@ -1,8 +1,12 @@
 <?php
 
+
+namespace App;
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Created by PhpStorm.
- * 
+ *
  * User: Joaquin
  * Date: 16.07.14
  * Time: 20:03
@@ -41,8 +45,10 @@
  * @method static \Illuminate\Database\Query\Builder|\Game whereTurnoRepartir($value)
  * @property boolean $seDebeRepartir
  * @method static \Illuminate\Database\Query\Builder|\Game whereSeDebeRepartir($value)
+ * @method static \App\Game find($id,$columns = array('*'))
+ * @method static \App\Game findOrFail($id,$columns = array('*'))
  */
-class Game extends Eloquent
+class Game extends Model
 {
 
     /**
@@ -129,7 +135,7 @@ class Game extends Eloquent
      * @param integer $user
      * @return bool
      */
-    public function perteneceJugador($user_id)
+    public function  perteneceJugador($user_id)
     {
         if ($this->jugador1_id == $user_id
             || $this->jugador2_id == $user_id

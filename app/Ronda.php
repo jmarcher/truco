@@ -1,7 +1,11 @@
-<?php
+<?php namespace App;
+
+
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Created by PhpStorm.
- * 
+ *
  * User: Joaquin
  * Date: 17.07.14
  * Time: 16:37
@@ -34,9 +38,9 @@
  * @method static \Illuminate\Database\Query\Builder|\Ronda whereGanador($value)
  * @method static \Illuminate\Database\Query\Builder|\Ronda whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Ronda whereUpdatedAt($value)
+ * @method static \App\Ronda find($id,$columns = array('*'))
  */
-
-class Ronda extends Eloquent {
+class Ronda extends Model {
 
     /**
      * @var string

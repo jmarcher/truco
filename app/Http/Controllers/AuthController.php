@@ -7,13 +7,22 @@
  */
 
 //namespace App\Http\Controllers;
-
-use App\Http\Controllers\BaseTrucoController;
+namespace App\Http\Controllers;
+use App\Http\Requests;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
 
-class AuthController  extends BaseTrucoController{
+
+class AuthController  extends Controlador{
+
+    use AuthenticatesAndRegistersUsers;
+
 
     public function auth()
     {
@@ -72,7 +81,7 @@ class AuthController  extends BaseTrucoController{
     public function doLogout()
     {
         Auth::logout(); // log the user out of our application
-        return Redirect::to('login'); // redirect the user to the login screen
+       return Redirect::to('login'); // redirect the user to the login screen
     }
 
     public function showLogin()
