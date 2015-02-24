@@ -15,12 +15,12 @@ class AgregarGritos extends Migration {
 		Schema::table('manos', function(Blueprint $table)
 		{
 			$table->tinyInteger("tieneLaPalabra");
-            $table->tinyInteger("puntosEnvido")->unsigned();
-            $table->tinyInteger("noQuisoEnvido")->unsigned();
+            $table->tinyInteger("puntosEnvido")->unsigned()->default(0)->nullable();
+            $table->tinyInteger("noQuisoEnvido")->unsigned()->nullable();
             $table->json("flores");
             $table->boolean("alguienTieneFlor");//Para deshabilitar envido fácil
-            $table->tinyInteger("puntosTruco")->unsigned();
-            $table->tinyInteger("noQuisoTruco")->unsigned();
+            $table->tinyInteger("puntosTruco")->unsigned()->default(0);
+            $table->tinyInteger("noQuisoTruco")->unsigned()->nullable();
 		});
 	}
 

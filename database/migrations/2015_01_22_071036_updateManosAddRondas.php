@@ -30,16 +30,18 @@ class UpdateManosAddRondas extends Migration {
 	 * @return void
 	 */
 	public function down()
-	{
+	{/*
         Schema::table("manos", function(Blueprint $table) {
-            $table->dropForeign('ronda1_id');
-            $table->dropForeign('ronda2_id');
-            $table->dropForeign('ronda3_id');
 
+/*
             $table->dropColumn("ronda1_id");
             $table->dropColumn("ronda2_id");
-            $table->dropColumn("ronda3_id");
-        });
+            $table->dropColumn("ronda3_id");*
+
+            /*$table->dropForeign('ronda1_id');
+            $table->dropForeign('ronda2_id');
+            $table->dropForeign('ronda3_id');
+        });*/
 	}
 
 }

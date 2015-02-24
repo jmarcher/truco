@@ -91,14 +91,15 @@ class ManoModRondaModGame extends Migration
      */
     public function down()
     {
-        Schema::drop("manos");
-        Schema::table("rondas", function (Blueprint $table) {
+      /*Schema::table("rondas", function (Blueprint $table) {
             $table->dropColumn("manoId");
-        });
+        });*/
         Schema::table("games", function (Blueprint $table) {
-            $table->dropIndex("manoId");
+            //$table->dropIndex("manoId");
             $table->dropColumn("manoId");
         });
+        Schema::drop("manos");
+
     }
 
 }

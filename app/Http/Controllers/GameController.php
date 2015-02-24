@@ -9,14 +9,17 @@
  * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
  */
 
-
+//Models
 use App\Carta;
 use App\Game;
 use App\Http\Requests;
 use App\Mano;
 use App\Ronda;
+use App\User;
+
 use Auth;
 use \Illuminate\Support\Facades\Response;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class GameController extends BaseTrucoController
@@ -458,7 +461,7 @@ class GameController extends BaseTrucoController
             } else {
                 return Response::json($this->getError(4));
             }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $model) {
+        } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
         return Response::json($this->getError());
@@ -503,12 +506,17 @@ class GameController extends BaseTrucoController
             }else{
                 return Response::json($this->getError(11));
             }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $model) {
+        } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
         //return $this->returnGameData($id);
     }
 
+    /**
+     * @param int $id
+     * @param string $grito
+     * @return null
+     */
     public function gritar($id, $grito){
         /**
          * TODO:
@@ -518,12 +526,39 @@ class GameController extends BaseTrucoController
          * No querer?????
          * Flor???? automáticamente gritada? u opción de decir envido antes.
          */
+        /*
+         * Leyenda:
+         * e = envido
+         * f = flor
+         * t = truco
+         * re = real envido
+         * aie = a igualar envido
+         * cfr = contraflor al resto
+         * cf5e = con flor 5 tantos de envido
+         * rt = re truco
+         * v4 = vale cuatro
+         *
+         * Respetar esta leyenda para ser consiso con cualquier versión.
+         *
+         */
         try{
             $game = Game::findOrFail($id);
             if($game->perteneceJugador(Auth::id())){
                 $mano = Mano::find($game->manoId);
-                if($mano->tieneLaPalabra(Auth::id())){
-
+                $user_pos = Auth::id();
+                if($mano->tieneLaPalabra($user_pos)){
+                    switch($grito){
+                        case "e": {//envido
+                            $mano->gritarEnvido($user_pos);
+                        }
+                        case "f": {//flor
+                            $mano->gritarFlor($user_pos);
+                        }
+                        case "t": {//truco
+                            $mano->gritarTruco($user_pos);
+                        }
+                    }
+                    $mano->save();
                 }else{
                     return Response::json($this->info("No tiene la palabra"));
                 }
@@ -531,7 +566,7 @@ class GameController extends BaseTrucoController
                 return Response::json($this->getError(4));
             }
 
-        }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $model){
+        }catch (ModelNotFoundException $model){
             return Response::json($this->getError(3));
         }
         return null;

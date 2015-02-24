@@ -1,11 +1,13 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use App\Carta;
 
 /**
  * Created by PhpStorm.
  *
- * User: Joaquin
+ * User: Joaquín
  * Date: 17.07.14
  * Time: 22:08
  *
@@ -92,6 +94,10 @@ class Mano extends Model
     protected $table = "manos";
 
 
+    /**
+     * @param array $sorteados
+     * @return int
+     */
     private function darUnaCarta(&$sorteados)
     {//Probado, la performanceno cambia
         $candidato = mt_rand(1, 40);
@@ -104,6 +110,9 @@ class Mano extends Model
     }
 
 
+    /**
+     * Crea una mano aleatoria bzw. reparte las cartas
+     */
     public function crearManoAleatoria()
     {
         $this->muestra = mt_rand(1, 40);
@@ -126,8 +135,117 @@ class Mano extends Model
         $this->carta_A_jugador6 = $this->darUnaCarta($sorteados);
         $this->carta_B_jugador6 = $this->darUnaCarta($sorteados);
         $this->carta_C_jugador6 = $this->darUnaCarta($sorteados);
+
+        //TODO: asignar quien tiene flor
     }
 
+    /**
+     * Decide si la carta pasada por parametro es muestra
+     *
+     * @param Carta $muestra
+     * @param Carta $carta
+     * @return bool
+     */
+    private function esMuestra(Carta $muestra, Carta $carta){
+        if($carta->palo == $muestra->palo){
+            switch($carta->numero){
+                case 2: return true; break;
+                case 4: return true; break;
+                case 5: return true; break;
+                case 10: return true; break;
+                case 11: return true; break;
+                case 12:{
+                    switch ($muestra->numero) {
+                        case 2: return true; break;
+                        case 4: return true; break;
+                        case 5: return true; break;
+                        case 10: return true; break;
+                        case 11: return true; break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Busca dos carta del mismo palo
+     *
+     * @param Carta $cartaA
+     * @param Carta $cartaB
+     * @param Carta $cartaC
+     * @return bool
+     */
+    private function dosMismoPalo(Carta $cartaA, Carta $cartaB, Carta $cartaC){
+        return $cartaA->palo == $cartaB->palo
+            || $cartaB->palo==$cartaC->palo
+            || $cartaA->palo==$cartaC->palo;
+    }
+
+    /**
+     * Busca una muestra
+     *
+     * @param Carta $muestra
+     * @param Carta $cartaA
+     * @param Carta $cartaB
+     * @param Carta $cartaC
+     * @return bool
+     */
+    private function unaEsMuestra(Carta $muestra, Carta $cartaA, Carta $cartaB, Carta $cartaC){
+        return $this->esMuestra($muestra, $cartaA)
+            || $this->esMuestra($muestra, $cartaB)
+            || $this->esMuestra($muestra, $cartaC);
+
+    }
+
+    /**
+     * Busca dos muestras
+     * (Si tiene más también retorna true
+     *
+     * @param Carta $muestra
+     * @param Carta $cartaA
+     * @param Carta $cartaB
+     * @param Carta $cartaC
+     * @return bool
+     */
+    private function dosSonMuestra(Carta $muestra, Carta $cartaA, Carta $cartaB, Carta $cartaC){
+        return ($this->esMuestra($muestra, $cartaA) && $this->esMuestra($muestra, $cartaB))
+            || ($this->esMuestra($muestra, $cartaA) && $this->esMuestra($muestra, $cartaC))
+            || ($this->esMuestra($muestra, $cartaB) && $this->esMuestra($muestra, $cartaC));
+
+    }
+
+    /**
+     * Decide si las cartas del jugador son
+     *
+     * @param int $jugador
+     */
+    private function tieneFlor($jugador){
+        $muestra = Carta::find($this->muestra);
+
+        $cartas = $this->cartasDe($jugador);
+
+        $cartaA = Carta::find($cartas[0]);
+        $cartaB = Carta::find($cartas[1]);
+        $cartaC = Carta::find($cartas[2]);
+        if($cartaA->palo == $cartaB->palo
+            && $cartaC->palo == $cartaB->palo)
+        {
+            return true;
+        }elseif($this->dosMismoPalo($cartaA,$cartaB,$cartaC)
+            && $this->unaEsMuestra($muestra, $cartaA,$cartaB,$cartaC)){
+            return true;
+        }elseif($this->dosSonMuestra($muestra, $cartaA,$cartaB,$cartaC)){
+            return true;
+        }
+        return false;
+
+    }
+
+    /**
+     * @param int $jugador
+     * @return array
+     */
     public function cartasDe($jugador)
     {
         if ($jugador == 1) {
@@ -181,7 +299,7 @@ class Mano extends Model
      * @param \Carbon\Carbon $date
      * @return Ronda
      */
-    public function ultimaRonda(Carbon\Carbon $date = NULL)
+    public function ultimaRonda(\Carbon\Carbon $date = NULL)
     {//FIXME:Si la fecha es igual no descaga novedades
         if ($date != NULL) {
             $ronda = Ronda::find($this->ronda1_id);
@@ -227,7 +345,83 @@ class Mano extends Model
      * @param int $used_id
      * @return bool Si el jugador tiene la palabra o no
      */
-    public function tieneLaPalabra($used_id){
+    public function tieneLaPalabra($user_pos){
 
+        //throw new Exception('Not implemented');
+        return $this->tieneLaPalabra == $user_pos%2; //Palabra por grupo
+    }
+
+    /**
+     * Las precondiciones tienen que ser satisfechas para entrar a estos métodos.
+     *
+     * @param int $user_pos
+     * @return bool
+     */
+    public function gritarEnvido($user_pos){
+        //App::abort(201,"'tieneLaPalabra': Not fully implemented");
+        if($this->puntosEnvido != null) {
+            if ($this->noQuisoEnvido == null) {
+                $this->puntosEnvido += 2; //Suma dos puntos de envido a lo que hay ahi.
+                $this->tieneLaPalabra = ($user_pos + 1) % 2;
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * @param int $user_pos
+     * @return bool
+     */
+    public function gritarTruco($user_pos){
+        if($this->noQuisoTruco == null) {
+            $this->puntosTruco = 2; //Suma dos puntos de truco
+            $this->tieneLaPalabra = ($user_pos + 1) % 2;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param int $user_pos
+     * @return bool
+     */
+    public function gritarFlor($user_pos){
+        if($this->tieneFlor($user_pos)) {
+            $this->flores[$user_pos-1] = true; //Le da true al array de flores
+            $this->puntosEnvido=null;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param int $user_pos
+     * @return bool
+     */
+    public function noQuererEnvido($user_pos){
+        if($this->noQuisoEnvido==null){
+            $this->puntosEnvido /= 2;
+            $this->tieneLaPalabra = null;
+            $this->noQuisoEnvido = $user_pos;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param int $user_pos
+     * @return bool
+     */
+    public function noQuererTruco($user_pos){
+        if($this->noQuisoTruco==null){
+            $this->puntosTruco /= 2;
+            $this->tieneLaPalabra = null;
+            $this->noQuisoTruco = $user_pos;
+            //TODO: Finalizar la partida en GameController?
+            return true;
+        }
+        return false;//al pedo?
     }
 } 

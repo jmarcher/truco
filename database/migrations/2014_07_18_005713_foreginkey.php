@@ -33,10 +33,10 @@ class Foreginkey extends Migration {
         {
             $table->dropForeign('manoId');
         });*/
-        Schema::table("games", function(Blueprint $table)
+      /*  Schema::table("games", function(Blueprint $table)
         {
             $table->dropForeign('manoId');
-        });
+        })*;*/
 	}
 
 }
