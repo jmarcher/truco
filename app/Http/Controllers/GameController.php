@@ -10,7 +10,6 @@
  */
 
 //Models
-use App\Carta;
 use App\Game;
 use App\Http\Requests;
 use App\Mano;

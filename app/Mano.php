@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use App\Carta;
+use App\Ronda;
 
 /**
  * Created by PhpStorm.
