@@ -1,8 +1,8 @@
 [![License](https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-# Truco online opensource
+# Truco online
 
-Este es el proyecto de truco online opensource.
+Este es el proyecto de truco online.
 
 
 Para más información sobre como funciona este proyecto, puedes instalar la aplicacion para smartphone.
