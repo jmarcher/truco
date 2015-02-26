@@ -20,6 +20,7 @@ use App\User;
 use Auth;
 use \Illuminate\Support\Facades\Response;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
+use PhpSpec\Exception\Exception;
 
 
 class GameController extends BaseTrucoController
@@ -347,5 +348,14 @@ class GameController extends BaseTrucoController
             return Response::json($this->getError(3));
         }
         return null;
+    }
+
+    /**
+     * No querer el grito actual, tiene que tener la palabra.
+     *
+     * @param int $id GameId
+     */
+    public function noQuerer($id){
+        throw new Exception("No implementado");
     }
 } 
