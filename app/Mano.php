@@ -376,9 +376,11 @@ class Mano extends Model
      */
     public function gritarTruco($user_pos){
         if($this->noQuisoTruco == null) {
-            $this->puntosTruco = 2; //Suma dos puntos de truco
-            $this->tieneLaPalabra = ($user_pos + 1) % 2;
-            return true;
+            if ($this->puntosTruco==0) { //No fue gritado antes y tampoco el re o el vale cuatro
+                $this->puntosTruco = 2; //Suma dos puntos de truco
+                $this->tieneLaPalabra = ($user_pos + 1) % 2;
+                return true;
+            }
         }
         return false;
     }
@@ -423,5 +425,45 @@ class Mano extends Model
             return true;
         }
         return false;//al pedo?
+    }
+
+    /**
+     * @param Mano $mano
+     * @return array Puntos a sumar Nosotros y ellos
+     */
+    private function resolverGanadorMano(){
+        /*
+         *
+         */
+        $rondas = array(
+            Ronda::find($this->ronda1_id),
+            Ronda::find($this->ronda2_id),
+            Ronda::find($this->ronda3_id),
+        );
+        $retorno = array(
+            "n" => 0,
+            "e" => 0
+        );
+        /**
+         *    000 = sum(0) || g=0
+         *    001 = sum(1) || g =0
+         *    011 = sum(2) || g = 1
+         *    010 = sum(1) || g = 0
+         *    101 = sum(2) || g = 1
+         *    110 = sum(2) || g 1
+         *    100 = sum(1) || g=0
+         *    111 = sum(3) || g 1
+         */
+        $sum = 0;
+        foreach($rondas as $ronda){
+            $sum += ($ronda->ganador) % 2; //Modulo del ganador es 0 ó 1
+        }
+
+        //TODO: Que sume los puntos de los gritos
+        if($sum >= 2){//Gana el equipo 2,4,6
+            $retorno['e'] = 1;//Punto por haber ganado la mano
+        }else{ //Gana el equipo 1,3,5
+            $retorno['n'] = 1; //Punto por haber ganado la mano
+        }
     }
 } 

@@ -77,190 +77,6 @@ class GameController extends BaseTrucoController
     }
 
     /**
-     * Resuelve quien es el ganador de la ronda actual con todas las cartas sobre la mesa
-     *
-     * En caso de no estar todas las cartas sobre la mesa retorna NULL o error
-     * En caso contrario retorna al ganador de la ronda actual.
-     *
-     */
-    public function resolverGanadorRonda(Ronda $ronda, $muestraId)
-    {
-        $enMesa = array("muestra" => $muestraId,//2 copa
-            "user1" => $ronda->carta_jugador1, //5 copa
-            "user2" => $ronda->carta_jugador2, //6 espada
-            "user3" => $ronda->carta_jugador3, //5 basto
-            "user4" => $ronda->carta_jugador4, //2 oro
-            "user5" => $ronda->carta_jugador5, //2 oro
-            "user6" => $ronda->carta_jugador6, //2 oro
-        );
-        $muestra = Carta::find($enMesa['muestra']);
-
-
-        $valoresEnOrden = array(
-
-            Carta::whereRaw("numero=2 and palo=?", array($muestra['palo']))->get(array('id'))[0],
-            Carta::whereRaw("numero=4 and palo=?", array($muestra['palo']))->get(array('id'))[0],
-            Carta::whereRaw("numero=5 and palo=?", array($muestra['palo']))->get(array('id'))[0],
-            Carta::whereRaw("numero=11 and palo=?", array($muestra['palo']))->get(array('id'))[0],
-            Carta::whereRaw("numero=10 and palo=?", array($muestra['palo']))->get(array('id'))[0],
-
-            //matas
-            Carta::whereRaw("numero=1 and palo='espada'")->get(array('id'))[0],
-            Carta::whereRaw("numero=1 and palo='basto'")->get(array('id'))[0],
-            Carta::whereRaw("numero=7 and palo='espada'")->get(array('id'))[0],
-            Carta::whereRaw("numero=7 and palo='oro'")->get(array('id'))[0],
-
-            Carta::where("numero", "=", 3)->get(array('id'))->toArray(),
-
-            Carta::whereRaw("numero=2 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
-
-            Carta::whereRaw("numero=1 and (palo='oro' or palo='copa')")->get(array('id'))->toArray(),
-
-            Carta::where("numero", "=", 12)->get(array('id'))->toArray(),
-
-            Carta::whereRaw("numero=11 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
-
-            Carta::whereRaw("numero=10 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
-
-
-            Carta::whereRaw("numero=7 and (palo='copa' or palo='basto')")->get(array('id'))->toArray(),
-
-
-            Carta::where("numero", "=", 6)->get(array('id'))->toArray(),
-
-
-            Carta::whereRaw("numero=5 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
-
-            Carta::whereRaw("numero=4 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
-
-        );
-        if ($muestra->numero == 2) {
-            $valoresEnOrden[0] = Carta::whereRaw("numero=12 and palo=?", array($muestra['palo']))->get(array('id'))[0];
-            if ($muestra['palo'] == "oro") {
-                unset($valoresEnOrden[12][0]);
-            } elseif ($muestra['palo'] == "basto") {
-                unset($valoresEnOrden[12][1]);
-            } elseif ($muestra['palo'] == "espada") {
-                unset($valoresEnOrden[12][2]);
-            } elseif ($muestra['palo'] == "copa") {
-                unset($valoresEnOrden[12][3]);
-            }
-            //unset($valoresEnOrden[12][$key]);
-        } elseif ($muestra->numero == 4) {
-            $valoresEnOrden[1] = Carta::whereRaw("numero=12 and palo=?", array($muestra['palo']))->get(array('id'))[0];
-            if ($muestra['palo'] == "oro") {
-                unset($valoresEnOrden[12][0]);
-            } elseif ($muestra['palo'] == "basto") {
-                unset($valoresEnOrden[12][1]);
-            } elseif ($muestra['palo'] == "espada") {
-                unset($valoresEnOrden[12][2]);
-            } elseif ($muestra['palo'] == "copa") {
-                unset($valoresEnOrden[12][3]);
-            }
-        } elseif ($muestra->numero == 5) {
-            $valoresEnOrden[2] = Carta::whereRaw("numero=12 and palo=?", array($muestra['palo']))->get(array('id'))[0];
-            if ($muestra['palo'] == "oro") {
-                unset($valoresEnOrden[12][0]);
-            } elseif ($muestra['palo'] == "basto") {
-                unset($valoresEnOrden[12][1]);
-            } elseif ($muestra['palo'] == "espada") {
-                unset($valoresEnOrden[12][2]);
-            } elseif ($muestra['palo'] == "copa") {
-                unset($valoresEnOrden[12][3]);
-            }
-        } elseif ($muestra->numero == 11) {
-            $valoresEnOrden[3] = Carta::whereRaw("numero=12 and palo=?", array($muestra['palo']))->get(array('id'))[0];
-            if ($muestra['palo'] == "oro") {
-                unset($valoresEnOrden[12][0]);
-            } elseif ($muestra['palo'] == "basto") {
-                unset($valoresEnOrden[12][1]);
-            } elseif ($muestra['palo'] == "espada") {
-                unset($valoresEnOrden[12][2]);
-            } elseif ($muestra['palo'] == "copa") {
-                unset($valoresEnOrden[12][3]);
-            }
-        } elseif ($muestra->numero == 10) {
-            $valoresEnOrden[4] = Carta::whereRaw("numero=12 and palo=?", array($muestra['palo']))->get(array('id'))[0];
-            if ($muestra['palo'] == "oro") {
-                unset($valoresEnOrden[12][0]);
-            } elseif ($muestra['palo'] == "basto") {
-                unset($valoresEnOrden[12][1]);
-            } elseif ($muestra['palo'] == "espada") {
-                unset($valoresEnOrden[12][2]);
-            } elseif ($muestra['palo'] == "copa") {
-                unset($valoresEnOrden[12][3]);
-            }
-        }
-
-        //return Response::make(($valoresEnOrden[12][0]['id']/*["id"]*/));
-        //j = jugador
-        //v = valor de la carta
-        $valoresRonda = array(
-            array("j" => 1,
-                "v" => $this->valor($valoresEnOrden, $enMesa['user1'])),
-            array("j" => 2,
-                "v" => $this->valor($valoresEnOrden, $enMesa['user2'])),
-            array("j" => 3,
-                "v" => $this->valor($valoresEnOrden, $enMesa['user3'])),
-            array("j" => 4,
-                "v" => $this->valor($valoresEnOrden, $enMesa['user4'])),
-            array("j" => 5,
-                "v" => $this->valor($valoresEnOrden, $enMesa['user5'])),
-            array("j" => 6,
-                "v" => $this->valor($valoresEnOrden, $enMesa['user6'])),
-        );
-        usort($valoresRonda, function ($a, $b) {
-                if ($a['v'] == NULL) {
-                    return 1;
-                }
-                if ($a['v'] > $b['v']) {
-                    return 1;
-                } elseif ($a['v'] < $b['v']) {
-                    return -1;
-                }
-
-                //TODO: Controlar quien tiró primero la carta
-                return 0;
-
-            }
-        );
-        //dd($valoresRonda);
-        //return Response::make($this->valor($valoresEnOrden,$enMesa['user1']). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user2'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user3'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user4'])) );
-        //$header=array();
-        return ($valoresRonda);
-    }
-
-    /**
-     * Resuelve un valor numérico para luego ser evaluado, para saber quien ganó
-     *
-     * @param $valoresEnOrden
-     * @param $idCarta
-     * @return int|string
-     */
-    private function valor($valoresEnOrden, $idCarta)
-    {
-        $valor = 1;
-        if ($idCarta == NULL) {
-            return PHP_INT_MAX;
-        }
-        foreach ($valoresEnOrden as $carta) {
-            //return $carta;
-            //return $carta['id'];
-            if (isset($carta['id']) && $carta['id'] == $idCarta)
-                return $valor;
-            elseif (count($carta) > 1) {
-                foreach ($carta as $nido) {
-                    if (isset($nido['id']) && $nido['id'] == $idCarta)
-                        return $valor;
-                }
-            }
-            $valor++;
-        }
-        return "pepe";
-
-    }
-
-    /**
      * @param $id Id de la partida
      * @param $cartaId Lugar de la carta:  A;B;C
      * @return \Illuminate\Http\JsonResponse|null
@@ -304,7 +120,7 @@ class GameController extends BaseTrucoController
                                 }
                                 if (!$ronda->noTiroCarta($mano->turno)) {//Quiere decir que tiró la carta
                                     //esto quiere decir que es el fin de la ronda actual
-                                    $ganadorRonda = $this->resolverGanadorRonda($ronda, $mano->muestra);
+                                    $ganadorRonda = $ronda->resolverGanadorRonda($ronda, $mano->muestra);
                                     $ronda->ganador = $ganadorRonda[0]['j']; //Asigna al ganador
                                     $mano->turno = $ganadorRonda[0]['j'];
 
@@ -314,7 +130,7 @@ class GameController extends BaseTrucoController
                                     if (!$mano->asignarRonda($nuevaRonda->id)) {
                                         //Ya no hay más rondas por jugar
                                         //FIXME: Primer ronda empate? [Agregar una ronda dummy si la primera es empate?]
-                                        $this->resolverGanadorMano($mano);
+                                        $mano->resolverGanadorMano($mano);
                                         $game->turnoRepartir++;
                                         if ($game->turnoRepartir > $game->cantJugadores) {
                                             $game->turnoRepartir = 1;
@@ -347,46 +163,6 @@ class GameController extends BaseTrucoController
             return Response::json($this->getError(3));
         }
         return null;
-    }
-
-    /**
-     * @param Mano $mano
-     * @return array Puntos a sumar Nosotros y ellos
-     */
-    private function resolverGanadorMano(Mano $mano){
-        /*
-         *
-         */
-        $rondas = array(
-            Ronda::find($mano->ronda1_id),
-            Ronda::find($mano->ronda2_id),
-            Ronda::find($mano->ronda3_id),
-        );
-        $retorno = array(
-            "n" => 0,
-            "e" => 0
-        );
-        /**
-        *    000 = sum(0) || g=0
-        *    001 = sum(1) || g =0
-        *    011 = sum(2) || g = 1
-        *    010 = sum(1) || g = 0
-        *    101 = sum(2) || g = 1
-        *    110 = sum(2) || g 1
-        *    100 = sum(1) || g=0
-        *    111 = sum(3) || g 1
-         */
-        $sum = 0;
-        foreach($rondas as $ronda){
-            $sum += ($ronda->ganador) % 2; //Modulo del ganador es 0 ó 1
-        }
-
-        //TODO: Que sume los puntos de los gritos
-        if($sum >= 2){//Gana el equipo 2,4,6
-            $retorno['e'] = 1;//Punto por haber ganado la mano
-        }else{ //Gana el equipo 1,3,5
-            $retorno['n'] = 1; //Punto por haber ganado la mano
-        }
     }
 
     public function returnGamesList()
@@ -521,10 +297,11 @@ class GameController extends BaseTrucoController
         /**
          * TODO:
          * Verificar que tiene la palabra    OK
-         * Pasar la palabra al otro equipo (u otro jugador?)
+         * Pasar la palabra al otro equipo (u otro jugador?) OK
          * Comprobar que lo que grita no fue gritado ya (excepto el envido)
          * No querer?????
          * Flor???? automáticamente gritada? u opción de decir envido antes.
+         *
          */
         /*
          * Leyenda:
