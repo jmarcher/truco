@@ -355,6 +355,6 @@ class GameController extends BaseTrucoController
      * @param int $id GameId
      */
     public function noQuerer($id){
-        throw new Exception("No implementado");
+        App::abort(201,"'noQuerer': Not fully implemented");
     }
 } 
