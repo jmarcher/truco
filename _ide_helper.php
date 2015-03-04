@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.0.6 on 2015-02-25.
+ * Generated for Laravel 5.0.13 on 2015-03-04.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -1503,7 +1503,7 @@ namespace {
         /**
          * Register a custom Blade compiler.
          *
-         * @param \Closure $compiler
+         * @param callable $compiler
          * @return void 
          * @static 
          */
@@ -5258,7 +5258,7 @@ namespace {
          *
          * @param string $key
          * @param mixed $default
-         * @return string 
+         * @return string|array 
          * @static 
          */
         public static function input($key = null, $default = null){
@@ -7915,7 +7915,7 @@ namespace {
          *
          * @param string $key
          * @param mixed $default
-         * @return string 
+         * @return string|array 
          * @static 
          */
         public static function input($key = null, $default = null){
@@ -9586,6 +9586,17 @@ namespace {
          */
         public static function dispatchToRoute($request){
             return \Illuminate\Routing\Router::dispatchToRoute($request);
+        }
+        
+        /**
+         * Gather the middleware for the given route.
+         *
+         * @param \Illuminate\Routing\Route $route
+         * @return array 
+         * @static 
+         */
+        public static function gatherRouteMiddlewares($route){
+            return \Illuminate\Routing\Router::gatherRouteMiddlewares($route);
         }
         
         /**

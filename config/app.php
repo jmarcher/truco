@@ -147,11 +147,13 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
+		
 
         /*
          * Third party software
          */
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+	'Clockwork\Support\Laravel\ClockworkServiceProvider',
 
 
 	],
