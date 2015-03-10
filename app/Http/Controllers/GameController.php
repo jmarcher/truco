@@ -255,7 +255,7 @@ class GameController extends BaseTrucoController
                     $mano->gameId = $game->id;
                     $mano->cantJugadores = $game->cantJugadores;
                     $mano->crearManoAleatoria();
-                    $mano->turno = $game->playerPosition(Auth::user())+1;//Se le asigna al siguiente
+                    $mano->turno = $game->playerPosition(Auth::id())+1;//Se le asigna al siguiente
                     if($mano->turno > $game->cantJugadores){
                         //Si nos pasamos de la cantidad de jugadores,
                         //tenemos que el turno es del primero
