@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('repartirCartas/{id}', 'GameController@repartirCartas');
     Route::get('gritar/{id}/{grito}', 'GameController@gritar');
     Route::get('noQuerer/{id}', 'GameController@noQuerer');
+    Route::get('querer/{id}', 'GameController@querer');
 });
 /*
 Route::controllers([

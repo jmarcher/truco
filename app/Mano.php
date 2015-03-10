@@ -628,4 +628,16 @@ class Mano extends Model
         }
         return false;
     }
+
+    public function querer($user_pos)
+    {
+        if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
+            //significa que se podría querer el envido (ahora verificar que se gritó
+            if($this->puntosEnvido>0){
+                return $this->quererEnvido($user_pos);
+            }else{
+                return false;
+            }
+        }
+    }
 } 

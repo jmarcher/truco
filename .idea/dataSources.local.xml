@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="MySQL - truco@localhost" uuid="c00404b4-425e-46b2-9e28-7ff8f3f5516a">
-      <secret-storage>master_key</secret-storage>
-      <user-name>root</user-name>
-      <schema-pattern>truco.*</schema-pattern>
-      <default-schemas>truco.*</default-schemas>
-    </data-source>
+    <data-source name="MySQL - truco@localhost" uuid="c00404b4-425e-46b2-9e28-7ff8f3f5516a" />
   </component>
 </project>

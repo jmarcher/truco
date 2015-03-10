@@ -323,7 +323,7 @@ class GameController extends BaseTrucoController
             $game = Game::findOrFail($id);
             if($game->perteneceJugador(Auth::id())){
                 $mano = Mano::find($game->manoId);
-                $user_pos = Auth::id();
+                $user_pos = $game->playerPosition(Auth::id());
                 if($mano->tieneLaPalabra($user_pos)){
                     switch($grito){
                         case "e": {//envido
@@ -360,5 +360,33 @@ class GameController extends BaseTrucoController
      */
     public function noQuerer($id){
         App::abort(201,"'noQuerer': Not fully implemented");
+    }
+
+    /**
+     * Quiere el grito actual, tiene que tener la palabra
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function querer($id){
+        try {
+            $game = Game::find($id);
+            if($game->perteneceJugador(Auth::id())){
+                $user_pos = $game->playerPosition(Auth::id());
+                $mano = Mano::find($game->manoId);
+                if($mano->tieneLaPalabra($user_pos)){
+                    $response=$mano->querer($user_pos);
+                    $mano->save();
+                    return Response::json(array("r"=>$response));
+                }else{
+                    return Response::json($this->info("No tiene la palabra"));
+                }
+            }else{
+                return Response::json($this->getError(4));
+            }
+        } catch (ModelNotFoundException $model) {
+            return Response::json($this->getError(3));
+        }
+
     }
 } 
