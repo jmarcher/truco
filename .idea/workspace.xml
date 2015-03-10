@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76b60880-178a-4dd7-8058-0e96418dcb14" name="Default" comment="Modificaciones en los controladores principales">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/GameController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/GameController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Ronda.php" afterPath="$PROJECT_DIR$/app/Ronda.php" />
     </list>
     <ignored path="TrucoL5.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,13 +50,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GameController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GameController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/GameController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29591838" vertical-offset="4452" max-vertical-offset="7146">
+            <state vertical-scroll-proportion="-6.4444447" vertical-offset="4452" max-vertical-offset="7146">
               <caret line="257" column="65" selection-start-line="257" selection-start-column="65" selection-end-line="257" selection-end-column="65" />
               <folding>
                 <element signature="e#230#243#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Ronda.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Ronda.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.45918366" vertical-offset="1080" max-vertical-offset="4500">
+              <caret line="75" column="23" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="23" />
+              <folding>
+                <element signature="e#23#62#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,16 +79,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-9.740741" vertical-offset="979" max-vertical-offset="3024">
               <caret line="69" column="20" selection-start-line="69" selection-start-column="20" selection-end-line="69" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseTrucoController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BaseTrucoController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.259259" vertical-offset="601" max-vertical-offset="1314">
-              <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -213,7 +215,6 @@
         <option value="$PROJECT_DIR$/database/migrations/2014_07_18_000501_mano_modRonda_modGame.php" />
         <option value="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/app/Ronda.php" />
         <option value="$PROJECT_DIR$/config/debugbar.php" />
         <option value="$PROJECT_DIR$/database/migrations/2015_02_13_215852_agregarGritos.php" />
         <option value="$PROJECT_DIR$/database/migrations/2015_03_09_132527_addPuntosEnvidoYQuererEnvudo.php" />
@@ -222,6 +223,7 @@
         <option value="$PROJECT_DIR$/app/Http/routes.php" />
         <option value="$PROJECT_DIR$/app/Mano.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/GameController.php" />
+        <option value="$PROJECT_DIR$/app/Ronda.php" />
       </list>
     </option>
   </component>
@@ -798,14 +800,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Ronda.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.235495" vertical-offset="3726" max-vertical-offset="4428">
-          <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="626">
@@ -985,10 +979,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/GameController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29591838" vertical-offset="4452" max-vertical-offset="7146">
+        <state vertical-scroll-proportion="-6.4444447" vertical-offset="4452" max-vertical-offset="7146">
           <caret line="257" column="65" selection-start-line="257" selection-start-column="65" selection-end-line="257" selection-end-column="65" />
           <folding>
             <element signature="e#230#243#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Ronda.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45918366" vertical-offset="1080" max-vertical-offset="4500">
+          <caret line="75" column="23" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="23" />
+          <folding>
+            <element signature="e#23#62#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
