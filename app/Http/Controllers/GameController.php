@@ -120,7 +120,7 @@ class GameController extends BaseTrucoController
                                 }
                                 if (!$ronda->noTiroCarta($mano->turno)) {//Quiere decir que tiró la carta
                                     //esto quiere decir que es el fin de la ronda actual
-                                    $ganadorRonda = $ronda->resolverGanadorRonda($ronda, $mano->muestra);
+                                    $ganadorRonda = $ronda->resolverGanadorRonda($mano->muestra);
                                     $ronda->ganador = $ganadorRonda[0]['j']; //Asigna al ganador
                                     $mano->turno = $ganadorRonda[0]['j'];
 
@@ -130,7 +130,7 @@ class GameController extends BaseTrucoController
                                     if (!$mano->asignarRonda($nuevaRonda->id)) {
                                         //Ya no hay más rondas por jugar
                                         //FIXME: Primer ronda empate? [Agregar una ronda dummy si la primera es empate?]
-                                        $mano->resolverGanadorMano($mano);
+                                        $mano->resolverGanadorMano();
                                         $game->turnoRepartir++;
                                         if ($game->turnoRepartir > $game->cantJugadores) {
                                             $game->turnoRepartir = 1;

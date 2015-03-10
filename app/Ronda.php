@@ -71,10 +71,6 @@ class Ronda extends Model {
             "user6" => $this->carta_jugador6, //2 oro
         );
         $muestra = Carta::find($enMesa['muestra']);
-        $muestra = [
-            'palo'=> $muestra->palo,
-            'numero' => $muestra->numero
-        ];
 
 
         $valoresEnOrden = array(
