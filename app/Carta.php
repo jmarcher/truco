@@ -6,7 +6,7 @@ use Illuminate\Database\Query\Builder;
 
 /**
  * Created by PhpStorm.
- *
+ * 
  * User: Joaquin
  * Date: 17.07.14
  * Time: 16:37

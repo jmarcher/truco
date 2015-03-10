@@ -253,6 +253,7 @@ class GameController extends BaseTrucoController
                     $ronda = new Ronda();
                     $mano = new Mano();
                     $mano->gameId = $game->id;
+                    $mano->cantJugadores = $game->cantJugadores;
                     $mano->crearManoAleatoria();
                     $mano->turno = $game->playerPosition(Auth::user())+1;//Se le asigna al siguiente
                     if($mano->turno > $game->cantJugadores){
@@ -327,12 +328,15 @@ class GameController extends BaseTrucoController
                     switch($grito){
                         case "e": {//envido
                             $mano->gritarEnvido($user_pos);
+                            break;
                         }
                         case "f": {//flor
                             $mano->gritarFlor($user_pos);
+                            break;
                         }
                         case "t": {//truco
                             $mano->gritarTruco($user_pos);
+                            break;
                         }
                     }
                     $mano->save();

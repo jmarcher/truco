@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Created by PhpStorm.
- *
+ * 
  * User: Joaquin
  * Date: 16.07.14
  * Time: 20:03

@@ -9,8 +9,6 @@ namespace App;
  * Modelo de error, es tirado para el json
  */
 
-//TODO: Hacer esto un Model y guardar cada vez que pasa un error
-
 class Error {
     public $error;
 
