@@ -70,6 +70,7 @@ class Ronda extends Model {
             "user5" => $this->carta_jugador5, //2 oro
             "user6" => $this->carta_jugador6, //2 oro
         );
+
         $muestra = Carta::find($enMesa['muestra']);
 
 
@@ -81,7 +82,7 @@ class Ronda extends Model {
             Carta::whereRaw("numero=11 and palo=?", array($muestra['palo']))->get(array('id'))[0],
             Carta::whereRaw("numero=10 and palo=?", array($muestra['palo']))->get(array('id'))[0],
 
-            //matas
+            //matas Hardcodeables
             Carta::whereRaw("numero=1 and palo='espada'")->get(array('id'))[0],
             Carta::whereRaw("numero=1 and palo='basto'")->get(array('id'))[0],
             Carta::whereRaw("numero=7 and palo='espada'")->get(array('id'))[0],
@@ -91,19 +92,19 @@ class Ronda extends Model {
 
             Carta::whereRaw("numero=2 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
 
-            Carta::whereRaw("numero=1 and (palo='oro' or palo='copa')")->get(array('id'))->toArray(),
+            Carta::whereRaw("numero=1 and (palo='oro' or palo='copa')")->get(array('id'))->toArray(),//hardcodeable
 
-            Carta::where("numero", "=", 12)->get(array('id'))->toArray(),
+            Carta::where("numero", "=", 12)->get(array('id'))->toArray(), //TODO: Hardcodeable
 
             Carta::whereRaw("numero=11 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
 
             Carta::whereRaw("numero=10 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
 
 
-            Carta::whereRaw("numero=7 and (palo='copa' or palo='basto')")->get(array('id'))->toArray(),
+            Carta::whereRaw("numero=7 and (palo='copa' or palo='basto')")->get(array('id'))->toArray(),//hardcodeable
 
 
-            Carta::where("numero", "=", 6)->get(array('id'))->toArray(),
+            Carta::where("numero", "=", 6)->get(array('id'))->toArray(), //TODO: Hardcodeable
 
 
             Carta::whereRaw("numero=5 and palo!=?", array($muestra['palo']))->get(array('id'))->toArray(),
@@ -197,10 +198,10 @@ class Ronda extends Model {
             }
 
             //TODO: Controlar quien tiró primero la carta
+            //Es necesario?
             return 0;
 
-        }
-        );
+        });
         //dd($valoresRonda);
         //return Response::make($this->valor($valoresEnOrden,$enMesa['user1']). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user2'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user3'])). "   ----    ".($this->valor($valoresEnOrden,$enMesa['user4'])) );
         //$header=array();
@@ -214,7 +215,7 @@ class Ronda extends Model {
      * @param $idCarta
      * @return int|string
      */
-    private function valor($valoresEnOrden, $idCarta)
+    private function valor($valoresEnOrden, $idCarta)3
     {
         $valor = 1;
         if ($idCarta == NULL) {

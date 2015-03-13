@@ -357,7 +357,7 @@ class Mano extends Model
                         return $ronda;
                     } else {
                         if ($this->ronda3_id != NULL) {
-                            $ronda = Ronda::find($this->ronda3_id);
+                            $ronda = Ronda::find($this->ronda3_id, false);
                             return $ronda;
                         } else {
                             return $ronda;//retorna ronda anterior
@@ -640,7 +640,7 @@ class Mano extends Model
             //significa que se podría querer el envido (ahora verificar que se gritó
             if($this->puntosEnvido>0){
                 return $this->quererEnvido($user_pos);
-            }else{//Esto significa que nadie gritó envido
+            }else{
                 return false;
             }
         }

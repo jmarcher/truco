@@ -39,6 +39,14 @@ Route::get('register', function () {
     return "Registrado";
 });
 
+Route::get("carbonTest/{date1}/{date2}",function ($date1, $date2){
+    $date = new \Carbon\Carbon($date1);
+    $updated = new \Carbon\Carbon($date2);
+
+    return $date->diffInSeconds($updated,false);
+});
+
+
 Route::get("prueba", function () {
     $time_start = microtime(true);
     for ($i = 1; $i <= 10000; $i++) {

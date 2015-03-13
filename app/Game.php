@@ -137,9 +137,9 @@ class Game extends Model
      */
     public function  perteneceJugador($user_id)
     {
-        if ($this->jugador1_id == $user_id
+        if (   $this->jugador1_id == $user_id
             || $this->jugador2_id == $user_id
-            || $this->jugador3_id ==$user_id
+            || $this->jugador3_id == $user_id
             || $this->jugador4_id == $user_id
             || $this->jugador5_id == $user_id
             || $this->jugador6_id == $user_id

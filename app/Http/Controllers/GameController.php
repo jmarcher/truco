@@ -1,13 +1,13 @@
 <?php namespace App\Http\Controllers;
-/**
- * Created by PhpStorm.
- * User: Joaquin
- * Date: 14.07.14
- * Time: 15:34
- *
- *
- * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
- */
+    /**
+     * Created by PhpStorm.
+     * User: Joaquin
+     * Date: 14.07.14
+     * Time: 15:34
+     *
+     *
+     * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
+     */
 
 //Models
 use App\Game;
@@ -41,7 +41,7 @@ class GameController extends BaseTrucoController
         $partida->turnoRepartir = 1;
         $partida->puntosE = 0;
         $partida->puntosN = 0;
-        $partida->seDebeRepartir=false;
+        $partida->seDebeRepartir = false;
         $partida->save();
 
         debug($partida);
@@ -59,7 +59,7 @@ class GameController extends BaseTrucoController
                 $pos = $game->insertPlayer(Auth::id());
                 if ($pos > 0) {
                     if ($game->cantJugadores == $pos) {//ya estamos en la max cant de jugadores
-                        $game->seDebeRepartir=true; //Ahora marcamos para que se puedan repartir las cartas
+                        $game->seDebeRepartir = true; //Ahora marcamos para que se puedan repartir las cartas
                     }
                     $game->save();
                     return Response::json(array("id" => $game->id));
@@ -165,21 +165,9 @@ class GameController extends BaseTrucoController
         return null;
     }
 
-    public function returnGamesList()
-    {
-        $listaJuegos = Game::all();
-        /*$listaRetorno=array();
-        foreach($listaJuegos as $juego){
-            array_push($listaRetorno,array("properties"=>array("title"=>"Juego ID:".$juego['id'])));
-        }*/
-        //TODO: Mostrar solo los juegos que son validos para el jugador bzw. que el creó o que lo invitaron
-
-        return Response::json($listaJuegos);
-    }
-
     public function returnGameData($id, $date = null)
     {
-        //TODO: retornar todos los datos necesarios
+        //TODO: retornar todos y solo los datos necesarios
         /*
          * Nombre de los usuarios, cartas que tienen en la mano actual.
          * no enviar mas información de la necesaria
@@ -187,13 +175,16 @@ class GameController extends BaseTrucoController
         try {
             $game = Game::findOrFail($id);
             if ($game->perteneceJugador(Auth::id())) {
+                if ($date == "undefined") {
+                    $date = null;
+                }
                 if ($date != null) {
                     $date = new \Carbon\Carbon($date);
                 }
-                if($game->seDebeRepartir){
-                    if($game->playerPosition(Auth::id()) == $game->turnoRepartir){
-                        return Response::json(array("repartir"=>true));
-                    }else{
+                if ($game->seDebeRepartir) {
+                    if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) {
+                        return Response::json(array("repartir" => true));
+                    } else {
                         return Response::json($this->info("Esperando que se repartan las cartas."));
                     }
                 }
@@ -243,11 +234,23 @@ class GameController extends BaseTrucoController
         return Response::json($this->getError());
     }
 
+    public function returnGamesList()
+    {
+        $listaJuegos = Game::all();
+        /*$listaRetorno=array();
+        foreach($listaJuegos as $juego){
+            array_push($listaRetorno,array("properties"=>array("title"=>"Juego ID:".$juego['id'])));
+        }*/
+        //TODO: Mostrar solo los juegos que son validos para el jugador bzw. que el creó o que lo invitaron
+
+        return Response::json($listaJuegos);
+    }
+
     public function repartirCartas($id)
     {
         try {
             $game = Game::findOrFail($id);
-            if($game->seDebeRepartir) {
+            if ($game->seDebeRepartir) {
                 //return Response::make($game->playerPosition(Auth::user()));
                 if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) { //Es el turno del jugador
                     $ronda = new Ronda();
@@ -255,15 +258,15 @@ class GameController extends BaseTrucoController
                     $mano->gameId = $game->id;
                     $mano->cantJugadores = $game->cantJugadores;
                     $mano->crearManoAleatoria();
-                    $mano->turno = $game->playerPosition(Auth::id())+1;//Se le asigna al siguiente
-                    if($mano->turno > $game->cantJugadores){
+                    $mano->turno = $game->playerPosition(Auth::id()) + 1;//Se le asigna al siguiente
+                    if ($mano->turno > $game->cantJugadores) {
                         //Si nos pasamos de la cantidad de jugadores,
                         //tenemos que el turno es del primero
                         $mano->turno = 1;
                     }
 
                     $game->turnoRepartir++;
-                    if($game->turnoRepartir>$game->cantJugadores){
+                    if ($game->turnoRepartir > $game->cantJugadores) {
                         $game->turnoRepartir = 1;
                     }
                     //$ronda->manoId = $mano->id;
@@ -280,7 +283,7 @@ class GameController extends BaseTrucoController
                 } else {
                     return Response::json($this->getError(10));
                 }
-            }else{
+            } else {
                 return Response::json($this->getError(11));
             }
         } catch (ModelNotFoundException $model) {
@@ -294,7 +297,8 @@ class GameController extends BaseTrucoController
      * @param string $grito
      * @return null
      */
-    public function gritar($id, $grito){
+    public function gritar($id, $grito)
+    {
         /**
          * TODO:
          * Verificar que tiene la palabra    OK
@@ -319,13 +323,13 @@ class GameController extends BaseTrucoController
          * Respetar esta leyenda para ser consiso con cualquier versión.
          *
          */
-        try{
+        try {
             $game = Game::findOrFail($id);
-            if($game->perteneceJugador(Auth::id())){
+            if ($game->perteneceJugador(Auth::id())) {
                 $mano = Mano::find($game->manoId);
                 $user_pos = $game->playerPosition(Auth::id());
-                if($mano->tieneLaPalabra($user_pos)){
-                    switch($grito){
+                if ($mano->tieneLaPalabra($user_pos)) {
+                    switch ($grito) {
                         case "e": {//envido
                             $mano->gritarEnvido($user_pos);
                             break;
@@ -340,14 +344,14 @@ class GameController extends BaseTrucoController
                         }
                     }
                     $mano->save();
-                }else{
+                } else {
                     return Response::json($this->info("No tiene la palabra"));
                 }
-            }else{
+            } else {
                 return Response::json($this->getError(4));
             }
 
-        }catch (ModelNotFoundException $model){
+        } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
         return null;
@@ -358,8 +362,9 @@ class GameController extends BaseTrucoController
      *
      * @param int $id GameId
      */
-    public function noQuerer($id){
-        App::abort(201,"'noQuerer': Not fully implemented");
+    public function noQuerer($id)
+    {
+        App::abort(201, "'noQuerer': Not fully implemented");
     }
 
     /**
@@ -368,20 +373,21 @@ class GameController extends BaseTrucoController
      * @param $id
      * @return mixed
      */
-    public function querer($id){
+    public function querer($id)
+    {
         try {
             $game = Game::find($id);
-            if($game->perteneceJugador(Auth::id())){
+            if ($game->perteneceJugador(Auth::id())) {
                 $user_pos = $game->playerPosition(Auth::id());
                 $mano = Mano::find($game->manoId);
-                if($mano->tieneLaPalabra($user_pos)){
-                    $response=$mano->querer($user_pos);
+                if ($mano->tieneLaPalabra($user_pos)) {
+                    $response = $mano->querer($user_pos);
                     $mano->save();
-                    return Response::json(array("r"=>$response));
-                }else{
+                    return Response::json(array("r" => $response));
+                } else {
                     return Response::json($this->info("No tiene la palabra"));
                 }
-            }else{
+            } else {
                 return Response::json($this->getError(4));
             }
         } catch (ModelNotFoundException $model) {
