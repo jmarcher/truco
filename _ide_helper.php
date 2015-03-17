@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.0.15 on 2015-03-12.
+ * Generated for Laravel 5.0.16 on 2015-03-17.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -3213,25 +3213,13 @@ namespace {
         /**
          * Find a model by its primary key.
          *
-         * @param mixed $id
+         * @param array $id
          * @param array $columns
-         * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|null 
+         * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static 
          * @static 
          */
-        public static function find($id, $columns = array()){
-            return \Illuminate\Database\Eloquent\Builder::find($id, $columns);
-        }
-        
-        /**
-         * Find a model by its primary key.
-         *
-         * @param array $ids
-         * @param array $columns
-         * @return \Illuminate\Database\Eloquent\Collection 
-         * @static 
-         */
-        public static function findMany($ids, $columns = array()){
-            return \Illuminate\Database\Eloquent\Builder::findMany($ids, $columns);
+        public static function findMany($id, $columns = array()){
+            return \Illuminate\Database\Eloquent\Builder::findMany($id, $columns);
         }
         
         /**

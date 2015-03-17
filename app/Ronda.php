@@ -215,7 +215,7 @@ class Ronda extends Model {
      * @param $idCarta
      * @return int|string
      */
-    private function valor($valoresEnOrden, $idCarta)3
+    private function valor($valoresEnOrden, $idCarta)
     {
         $valor = 1;
         if ($idCarta == NULL) {
