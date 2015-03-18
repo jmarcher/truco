@@ -142,7 +142,7 @@ class GameController extends BaseTrucoController
                                 }
                                 $mano->save();
                                 $ronda->save();
-                                return $this->returnGameData($gameId, $ronda->updated_at->subMinute());
+                                return $this->returnGameData($gameId);
                             } else {
                                 return Response::json($this->getError(10));
                             }
