@@ -131,10 +131,10 @@ class GameController extends BaseTrucoController
                                         //Ya no hay más rondas por jugar
                                         //FIXME: Primer ronda empate? [Agregar una ronda dummy si la primera es empate?]
                                         $mano->resolverGanadorMano();
-                                        $game->turnoRepartir++;
+                                       /* $game->turnoRepartir++;
                                         if ($game->turnoRepartir > $game->cantJugadores) {
                                             $game->turnoRepartir = 1;
-                                        }
+                                        }*/
                                         $game->seDebeRepartir = true;
                                         $game->manoId = null;
                                         $game->save();
@@ -175,21 +175,26 @@ class GameController extends BaseTrucoController
         try {
             $game = Game::findOrFail($id);
             if ($game->perteneceJugador(Auth::id())) {
+                $gameData = $game;
                 if ($date == "undefined") {
                     $date = null;
                 }
                 if ($date != null) {
                     $date = new \Carbon\Carbon($date);
                 }
-                if ($game->seDebeRepartir) {
+                if ($game->seDebeRepartir && !$game->partidaIniciada()) {//aca si ya se empezó el juego se tienen que mostrar las cartas
                     if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) {
                         return Response::json(array("repartir" => true));
                     } else {
                         return Response::json($this->info("Esperando que se repartan las cartas."));
                     }
                 }
-                if ($game->rondaActual != 0) {
-                    $gameData = $game;
+                if ($game->partidaIniciada()) {
+                    if ($game->seDebeRepartir && !$game->partidaIniciada()) {//aca si ya se empezó el juego se tienen que mostrar las cartas
+                        if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) {
+                            $gameData['repartir'] = true;
+                        }
+                    }
 
                     $gameData['jugador1'] = User::find($game->jugador1_id);
                     $gameData['jugador2'] = User::find($game->jugador2_id);
@@ -199,7 +204,13 @@ class GameController extends BaseTrucoController
                     $gameData['jugador6'] = User::find($game->jugador6_id);
 
                     $playerPos = $game->playerPosition(Auth::id());
-                    $mano = Mano::find($game->manoId);
+
+                    if($game->manoId == null) {//Todavia no se repartieron las cartas
+                       //Vamos a devolver la mano anterior para que todos la vean.
+                        $mano = Mano::where("gameId",'=',$game->id)->latest()->first();
+                    }else{
+                        $mano = Mano::find($game->manoId);
+                    }
                     $ronda = $mano->ultimaRonda($date);
                     if ($playerPos == $mano->turno) {
                         $gameData['turno'] = true;

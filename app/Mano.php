@@ -371,6 +371,8 @@ class Mano extends Model
             if ($this->ronda3_id == NULL) {
                 if ($this->ronda2_id == NULL) {
                     if ($this->ronda1_id == NULL) {
+                        //Devolver la utima ronda de la mano anterior
+                       // Ronda::whereGameId($this->gameId)->latest();
                         return null;
                     } else {
                         return Ronda::find($this->ronda1_id);
