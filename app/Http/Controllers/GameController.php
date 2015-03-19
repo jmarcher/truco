@@ -190,7 +190,7 @@ class GameController extends BaseTrucoController
                     }
                 }
                 if ($game->partidaIniciada()) {
-                    if ($game->seDebeRepartir && !$game->partidaIniciada()) {//aca si ya se empezó el juego se tienen que mostrar las cartas
+                    if ($game->seDebeRepartir) {//aca si ya se empezó el juego se tienen que mostrar las cartas
                         if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) {
                             $gameData['repartir'] = true;
                         }

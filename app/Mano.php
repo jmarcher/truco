@@ -636,6 +636,14 @@ class Mano extends Model
         return false;
     }
 
+    /**
+     * Quiere el grito actual, primero se tiene que verificar que grito esta en juego primero.
+     * "Querer" no diferencia cual grito es, solo deja el querido. Por ello se tiene que verificar
+     * cual es el que se tiene que querer.
+     *
+     * @param int $user_pos
+     * @return bool
+     */
     public function querer($user_pos)
     {
         if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
