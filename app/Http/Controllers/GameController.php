@@ -165,6 +165,11 @@ class GameController extends BaseTrucoController
         return null;
     }
 
+    /**
+     * @param $id
+     * @param null $date
+     * @return mixed
+     */
     public function returnGameData($id, $date = null)
     {
         //TODO: retornar todos y solo los datos necesarios
@@ -232,6 +237,14 @@ class GameController extends BaseTrucoController
 
                     $gameData['muestra'] = $mano->muestra;
                     $gameData['updated'] = $mano->updated_at . "";
+
+
+                    /*
+                     * Verifica los gritos que hay y los pone en la respuesta
+                     * solo si el jugador tiene que aceptarlos.
+                     */
+                    $gameData['seTieneQueQuererEvido']=$mano->seTieneQueQuererEnvido($playerPos);
+
                     return Response::json($gameData);
                 } else {
                     return Response::json($this->info("Esperando más jugadores."));

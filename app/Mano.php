@@ -655,4 +655,23 @@ class Mano extends Model
             }
         }
     }
+
+    /**
+     * Devuelve true si el jugador tiene que querer el envido
+     *
+     * @param int $playerPos
+     * @return bool
+     */
+    public function seTieneQueQuererEnvido($playerPos)
+    {
+        if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
+            //significa que se podría querer el envido (ahora verificar que se gritó
+            if($this->puntosEnvido>0){
+                if($this->tieneLaPalabra($playerPos)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 } 
