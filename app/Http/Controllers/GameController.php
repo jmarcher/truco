@@ -201,6 +201,7 @@ class GameController extends BaseTrucoController
                         }
                     }
 
+
                     $gameData['jugador1'] = User::find($game->jugador1_id);
                     $gameData['jugador2'] = User::find($game->jugador2_id);
                     $gameData['jugador3'] = User::find($game->jugador3_id);
@@ -209,6 +210,16 @@ class GameController extends BaseTrucoController
                     $gameData['jugador6'] = User::find($game->jugador6_id);
 
                     $playerPos = $game->playerPosition(Auth::id());
+
+                    /**
+                     * Hacemos un swap de los puntos para que sean correctos según la
+                     * posición en que estan sentados cada uno.
+                     */
+                    if($playerPos%2 == 1){
+                        $tmp = $gameData['puntosN'];
+                        $gameData['puntosN'] = $gameData['puntosE'];
+                        $gameData['puntosE'] = $tmp;
+                    }
 
                     if($game->manoId == null) {//Todavia no se repartieron las cartas
                        //Vamos a devolver la mano anterior para que todos la vean.
@@ -256,6 +267,18 @@ class GameController extends BaseTrucoController
             return Response::json($this->getError(3));
         }
         return Response::json($this->getError());
+    }
+
+    /**
+     * Hace un swap de las variables
+     *
+     * @param $x
+     * @param $y
+     */
+    private function swap(&$x,&$y) {
+        $tmp=$x;
+        $x=$y;
+        $y=$tmp;
     }
 
     public function returnGamesList()
@@ -388,7 +411,24 @@ class GameController extends BaseTrucoController
      */
     public function noQuerer($id)
     {
-        App::abort(201, "'noQuerer': Not fully implemented");
+        try {
+            $game = Game::find($id);
+            if ($game->perteneceJugador(Auth::id())) {
+                $user_pos = $game->playerPosition(Auth::id());
+                $mano = Mano::find($game->manoId);
+                if ($mano->tieneLaPalabra($user_pos)) {
+                    $response = $mano->noQuerer($user_pos);
+                    $mano->save();
+                    return $this->returnGameData($id);
+                } else {
+                    return Response::json($this->info("No tiene la palabra"));
+                }
+            } else {
+                return Response::json($this->getError(4));
+            }
+        } catch (ModelNotFoundException $model) {
+            return Response::json($this->getError(3));
+        }
     }
 
     /**
@@ -407,7 +447,7 @@ class GameController extends BaseTrucoController
                 if ($mano->tieneLaPalabra($user_pos)) {
                     $response = $mano->querer($user_pos);
                     $mano->save();
-                    return Response::json(array("r" => $response));
+                    return $this->returnGameData($id);
                 } else {
                     return Response::json($this->info("No tiene la palabra"));
                 }

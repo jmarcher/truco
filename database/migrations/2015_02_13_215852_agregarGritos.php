@@ -14,7 +14,7 @@ class AgregarGritos extends Migration {
 	{
 		Schema::table('manos', function(Blueprint $table)
 		{
-			$table->tinyInteger("tieneLaPalabra");
+			$table->tinyInteger("tieneLaPalabra")->nullable()->default(null);
             $table->tinyInteger("puntosEnvido")->unsigned()->default(0)->nullable();
             $table->tinyInteger("noQuisoEnvido")->unsigned()->nullable();
             $table->json("flores");

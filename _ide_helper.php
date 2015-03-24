@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.0.17 on 2015-03-18.
+ * Generated for Laravel 5.0.20 on 2015-03-24.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -437,6 +437,47 @@ namespace {
          */
         public static function getCachedRoutesPath(){
             return \Illuminate\Foundation\Application::getCachedRoutesPath();
+        }
+        
+        /**
+         * Get the path to the cached "compiled.php" file.
+         *
+         * @return string 
+         * @static 
+         */
+        public static function getCachedCompilePath(){
+            return \Illuminate\Foundation\Application::getCachedCompilePath();
+        }
+        
+        /**
+         * Get the path to the cached services.json file.
+         *
+         * @return string 
+         * @static 
+         */
+        public static function getCachedServicesPath(){
+            return \Illuminate\Foundation\Application::getCachedServicesPath();
+        }
+        
+        /**
+         * Determine if vendor path is writable.
+         *
+         * @return bool 
+         * @static 
+         */
+        public static function vendorIsWritableForOptimizations(){
+            return \Illuminate\Foundation\Application::vendorIsWritableForOptimizations();
+        }
+        
+        /**
+         * Determines if storage directory should be used for optimizations.
+         *
+         * @param bool $value
+         * @return $this 
+         * @static 
+         */
+        public static function useStoragePathForOptimizations($value = true){
+            return \Illuminate\Foundation\Application::useStoragePathForOptimizations($value);
         }
         
         /**
@@ -7499,17 +7540,6 @@ namespace {
         public static function bulk($jobs, $data = '', $queue = null){
             //Method inherited from \Illuminate\Queue\Queue            
             return \Illuminate\Queue\SyncQueue::bulk($jobs, $data, $queue);
-        }
-        
-        /**
-         * Get the current UNIX timestamp.
-         *
-         * @return int 
-         * @static 
-         */
-        public static function getTime(){
-            //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::getTime();
         }
         
         /**

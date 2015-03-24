@@ -395,7 +395,7 @@ class Mano extends Model
     public function tieneLaPalabra($user_pos){
 
         //throw new Exception('Not implemented');
-        return $this->tieneLaPalabra == $user_pos%2; //Palabra por grupo
+        return ($this->tieneLaPalabra == null) || $this->tieneLaPalabra == $user_pos%2; //Palabra por grupo
     }
 
     /**
@@ -673,5 +673,18 @@ class Mano extends Model
             }
         }
         return false;
+    }
+
+    public function noQuerer($user_pos)
+    {
+
+        if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
+            //significa que se podría querer el envido (ahora verificar que se gritó
+            if($this->puntosEnvido>0){
+                return $this->noQuererEnvido($user_pos);
+            }else{//Esto significa que nadie gritó envido
+                return false;
+            }
+        }
     }
 } 
