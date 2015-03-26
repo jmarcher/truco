@@ -1,13 +1,13 @@
 <?php namespace App\Http\Controllers;
-    /**
-     * Created by PhpStorm.
-     * User: Joaquin
-     * Date: 14.07.14
-     * Time: 15:34
-     *
-     *
-     * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
-     */
+/**
+ * Created by PhpStorm.
+ * User: Joaquin
+ * Date: 14.07.14
+ * Time: 15:34
+ *
+ *
+ * La idea es retornar siempre un JSON que pueda ser leido desde JAVA e intrpretado por la UI
+ */
 
 //Models
 use App\Game;
@@ -82,15 +82,7 @@ class GameController extends BaseTrucoController
     public function ponerCarta($id, $cartaId)
     {
         $gameId = $id;
-        /*
-         * Validaciones:
-         *  - Pertenece a la mesa OK
-         *  - No puso ya una carta OK
-         *  - Tiene esa carta en la mano OK
-         *  - Es su turno (opcional) OK
-         */
 
-        $user = Auth::user();
         try {
             $game = Game::findOrFail($gameId);
             if ($game->perteneceJugador(Auth::id())) {

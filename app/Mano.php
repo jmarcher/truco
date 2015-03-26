@@ -376,7 +376,6 @@ class Mano extends Model
             $this->ganadorEnvido = array_search(max($puntosEnvidoJugadores), $puntosEnvidoJugadores) + 1;
             $this->tantosEnvidoJugadores = json_encode($puntosEnvidoJugadores);
         }
-        //App::abort("No implementado los puntos de envido.");
     }
 
     /**

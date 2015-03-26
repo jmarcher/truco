@@ -34,7 +34,6 @@ class AuthController extends Controlador
         );
 
         // run the validation rules on the inputs from the form
-        // $input = array("email"=>$usuario, "password"=>$password)
         $validator = Validator::make(Input::all(), $rules);
 
         // if the validator fails, redirect back to the form
@@ -46,9 +45,6 @@ class AuthController extends Controlador
         } else {
 
             // create our user data for the authentication
-            //dd(Input::get('email'));
-            /*dd(Input::get('password'));
-            exit();*/
             $userdata = array(
                 'email' => Input::get('email'),
                 'password' => Input::get('password')
