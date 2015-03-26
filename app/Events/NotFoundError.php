@@ -4,18 +4,19 @@ use App\Events\Event;
 
 use Illuminate\Queue\SerializesModels;
 
-class NotFoundError extends Event {
+class NotFoundError extends Event
+{
 
-	use SerializesModels;
+    use SerializesModels;
 
-	/**
-	 * Create a new event instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
 
 }

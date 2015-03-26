@@ -7,7 +7,7 @@ use App\Ronda;
 
 /**
  * Created by PhpStorm.
- * 
+ *
  * User: Joaquín
  * Date: 17.07.14
  * Time: 22:08
@@ -84,14 +84,14 @@ use App\Ronda;
  * @method static \Illuminate\Database\Query\Builder|\Mano whereAlguienTieneFlor($value)
  * @method static \Illuminate\Database\Query\Builder|\Mano wherePuntosTruco($value)
  * @method static \Illuminate\Database\Query\Builder|\Mano whereNoQuisoTruco($value)
- * @method static \App\Mano find($id,$columns = array('*'))
+ * @method static \App\Mano find($id, $columns = array('*'))
  * @property string $tantosEnvidoJugadores
  * @property boolean $quiereEnvido
  * @method static \Illuminate\Database\Query\Builder|\App\Mano whereTantosEnvidoJugadores($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Mano whereQuiereEnvido($value)
  * @property boolean $cantJugadores
  * @method static \Illuminate\Database\Query\Builder|\App\Mano whereCantJugadores($value)
- * @property boolean $ganadorEnvido 
+ * @property boolean $ganadorEnvido
  * @method static \Illuminate\Database\Query\Builder|\App\Mano whereGanadorEnvido($value)
  */
 class Mano extends Model
@@ -101,23 +101,6 @@ class Mano extends Model
      * @var string
      */
     protected $table = "manos";
-
-
-    /**
-     * @param array $sorteados
-     * @return int
-     */
-    private function darUnaCarta(&$sorteados)
-    {//Probado, la performanceno cambia
-        $candidato = mt_rand(1, 40);
-        if (in_array($candidato, $sorteados)) {
-            return $this->darUnaCarta($sorteados);
-        } else {
-            $sorteados[] = $candidato;
-            return $candidato;
-        }
-    }
-
 
     /**
      * Crea una mano aleatoria bzw. reparte las cartas
@@ -153,106 +136,33 @@ class Mano extends Model
     }
 
     /**
-     * Calcula los puntos para el envido de una carta
-     * @param Carta $muestra
-     * @param Carta $carta
+     * @param array $sorteados
      * @return int
      */
-    private function puntosCarta(Carta $muestra, Carta $carta){
-        if($carta->palo == $muestra->palo){
-            switch($carta->numero){
-                case 2: return 30; break;
-                case 4: return 29; break;
-                case 5: return 28; break;
+    private function darUnaCarta(&$sorteados)
+    {//Probado, la performanceno cambia
+        $candidato = mt_rand(1, 40);
+        if (in_array($candidato, $sorteados)) {
+            return $this->darUnaCarta($sorteados);
+        } else {
+            $sorteados[] = $candidato;
+            return $candidato;
+        }
+    }
 
-                case 10:
-                case 11: return 27; break;
-                case 12:{
-                    switch ($muestra->numero) {
-                        case 2: return 30; break;
-                        case 4: return 29; break;
-                        case 5: return 28; break;
-
-                        case 10:
-                        case 11: return 27; break;
-                    }
-                }
+    /**
+     * Se fija si alguno de los jugadores (de los que estan jugando), tiene flor
+     *
+     * @return bool
+     */
+    private function alguienTieneFlor()
+    {
+        for ($jugador = 1; $jugador <= $this->cantJugadores; $jugador++) {
+            if ($this->tieneFlor($jugador)) {
+                return true;
             }
         }
-        switch($carta->numero){
-            case 12:
-            case 11:
-            case 10: return 0; break;
-            default: $carta->numero;
-        }
-        return $carta->numero;
-    }
-
-    /**
-     * Decide si la carta pasada por parametro es muestra
-     *
-     * @param Carta $muestra
-     * @param Carta $carta
-     * @return bool
-     */
-    private function esMuestra(Carta $muestra, Carta $carta){
-        return $this->puntosCarta($muestra, $carta) > 26; //Si los puntos de envido son mas grandes de 26 es una muestra
-    }
-
-    /**
-     * Busca dos carta del mismo palo
-     *
-     * @param Carta $cartaA
-     * @param Carta $cartaB
-     * @param Carta $cartaC
-     * @return bool
-     */
-    private function dosMismoPalo(Carta $cartaA, Carta $cartaB, Carta $cartaC){
-        return $cartaA->palo == $cartaB->palo
-            || $cartaB->palo==$cartaC->palo
-            || $cartaA->palo==$cartaC->palo;
-    }
-
-    /**
-     * @param Carta $muestra
-     * @param array $cartas
-     * @return bool
-     */
-    private function unaEsMuestraArray(Carta $muestra, $cartas){
-       return $this->unaEsMuestra($muestra, $cartas[0], $cartas[1], $cartas[2]);
-    }
-
-    /**
-     * Busca una muestra
-     *
-     * @param Carta $muestra
-     * @param Carta $cartaA
-     * @param Carta $cartaB
-     * @param Carta $cartaC
-     * @return bool
-     */
-    private function unaEsMuestra(Carta $muestra, Carta $cartaA, Carta $cartaB, Carta $cartaC){
-        return $this->esMuestra($muestra, $cartaA)
-            || $this->esMuestra($muestra, $cartaB)
-            || $this->esMuestra($muestra, $cartaC);
-
-    }
-
-    /**
-     * Busca dos muestras
-     * (Si tiene más también retorna true
-     *
-     * @param Carta $muestra
-     * @param Carta $cartaA
-     * @param Carta $cartaB
-     * @param Carta $cartaC
-     * @return bool
-     */
-    private function dosSonMuestra(Carta $muestra, Carta $cartaA, Carta $cartaB, Carta $cartaC){
-        return ($this->esMuestra($muestra, $cartaA) && $this->esMuestra($muestra, $cartaB))
-            || ($this->esMuestra($muestra, $cartaA) && $this->esMuestra($muestra, $cartaC))
-            || ($this->esMuestra($muestra, $cartaB) && $this->esMuestra($muestra, $cartaC));
-
+        return false;
     }
 
     /**
@@ -260,7 +170,8 @@ class Mano extends Model
      *
      * @param int $jugador
      */
-    private function tieneFlor($jugador){
+    private function tieneFlor($jugador)
+    {
         $muestra = Carta::find($this->muestra);
 
         $cartas = $this->cartasDe($jugador);
@@ -268,14 +179,15 @@ class Mano extends Model
         $cartaA = Carta::find($cartas[0]);
         $cartaB = Carta::find($cartas[1]);
         $cartaC = Carta::find($cartas[2]);
-        if($cartaA->palo == $cartaB->palo
-            && $cartaC->palo == $cartaB->palo)
-        {
+        if ($cartaA->palo == $cartaB->palo
+            && $cartaC->palo == $cartaB->palo
+        ) {
             return true;
-        }elseif($this->dosMismoPalo($cartaA,$cartaB,$cartaC)
-            && $this->unaEsMuestra($muestra, $cartaA,$cartaB,$cartaC)){
+        } elseif ($this->dosMismoPalo($cartaA, $cartaB, $cartaC)
+            && $this->unaEsMuestra($muestra, $cartaA, $cartaB, $cartaC)
+        ) {
             return true;
-        }elseif($this->dosSonMuestra($muestra, $cartaA,$cartaB,$cartaC)){
+        } elseif ($this->dosSonMuestra($muestra, $cartaA, $cartaB, $cartaC)) {
             return true;
         }
         return false;
@@ -301,6 +213,214 @@ class Mano extends Model
         }
 
         return array($this->carta_A_jugador6, $this->carta_B_jugador6, $this->carta_C_jugador6);
+    }
+
+    /**
+     * Busca dos carta del mismo palo
+     *
+     * @param Carta $cartaA
+     * @param Carta $cartaB
+     * @param Carta $cartaC
+     * @return bool
+     */
+    private function dosMismoPalo(Carta $cartaA, Carta $cartaB, Carta $cartaC)
+    {
+        return $cartaA->palo == $cartaB->palo
+        || $cartaB->palo == $cartaC->palo
+        || $cartaA->palo == $cartaC->palo;
+    }
+
+    /**
+     * Busca una muestra
+     *
+     * @param Carta $muestra
+     * @param Carta $cartaA
+     * @param Carta $cartaB
+     * @param Carta $cartaC
+     * @return bool
+     */
+    private function unaEsMuestra(Carta $muestra, Carta $cartaA, Carta $cartaB, Carta $cartaC)
+    {
+        return $this->esMuestra($muestra, $cartaA)
+        || $this->esMuestra($muestra, $cartaB)
+        || $this->esMuestra($muestra, $cartaC);
+
+    }
+
+    /**
+     * Decide si la carta pasada por parametro es muestra
+     *
+     * @param Carta $muestra
+     * @param Carta $carta
+     * @return bool
+     */
+    private function esMuestra(Carta $muestra, Carta $carta)
+    {
+        return $this->puntosCarta($muestra, $carta) > 26; //Si los puntos de envido son mas grandes de 26 es una muestra
+    }
+
+    /**
+     * Calcula los puntos para el envido de una carta
+     * @param Carta $muestra
+     * @param Carta $carta
+     * @return int
+     */
+    private function puntosCarta(Carta $muestra, Carta $carta)
+    {
+        if ($carta->palo == $muestra->palo) {
+            switch ($carta->numero) {
+                case 2:
+                    return 30;
+                    break;
+                case 4:
+                    return 29;
+                    break;
+                case 5:
+                    return 28;
+                    break;
+
+                case 10:
+                case 11:
+                    return 27;
+                    break;
+                case 12: {
+                    switch ($muestra->numero) {
+                        case 2:
+                            return 30;
+                            break;
+                        case 4:
+                            return 29;
+                            break;
+                        case 5:
+                            return 28;
+                            break;
+
+                        case 10:
+                        case 11:
+                            return 27;
+                            break;
+                    }
+                }
+            }
+        }
+        switch ($carta->numero) {
+            case 12:
+            case 11:
+            case 10:
+                return 0;
+                break;
+            default:
+                $carta->numero;
+        }
+        return $carta->numero;
+    }
+
+    /**
+     * Busca dos muestras
+     * (Si tiene más también retorna true
+     *
+     * @param Carta $muestra
+     * @param Carta $cartaA
+     * @param Carta $cartaB
+     * @param Carta $cartaC
+     * @return bool
+     */
+    private function dosSonMuestra(Carta $muestra, Carta $cartaA, Carta $cartaB, Carta $cartaC)
+    {
+        return ($this->esMuestra($muestra, $cartaA) && $this->esMuestra($muestra, $cartaB))
+        || ($this->esMuestra($muestra, $cartaA) && $this->esMuestra($muestra, $cartaC))
+        || ($this->esMuestra($muestra, $cartaB) && $this->esMuestra($muestra, $cartaC));
+
+    }
+
+    private function calcularPuntosEnvido()
+    {
+        if (!$this->alguienTieneFlor) {
+            $muestra = Carta::find($this->muestra);
+
+            $puntosEnvidoJugadores = array(
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            );
+
+            for ($jugador = 1; $jugador <= $this->cantJugadores; $jugador++) {
+                $cartas = $this->cartasDe($jugador);
+                if ($cartas[0] == null) {
+                    break;
+                }
+                $cartas = $this->intToCarta($cartas);
+                $puntos = array(
+                    $this->puntosCarta($muestra, $cartas[0]),
+                    $this->puntosCarta($muestra, $cartas[1]),
+                    $this->puntosCarta($muestra, $cartas[2]),
+                );
+
+                if ($this->unaEsMuestraArray($muestra, $cartas)) {
+                    //De acá agarramos las dos más grandes y las sumamos
+                    //Primero borramos el mínimo
+                    $puntos[array_search(min($puntos), $puntos)] = 0;
+                    $puntosEnvidoJugadores[$jugador - 1] = array_sum($puntos);
+                } elseif ($this->dosMismoPalo($cartas[0], $cartas[1], $cartas[2])) {
+                    $cartasMismoPalo = $this->dosMismoPaloArray($cartas);
+                    $puntosEnvidoJugadores[$jugador - 1] = 20
+                        + $this->puntosCarta($muestra, $cartasMismoPalo[0])
+                        + $this->puntosCarta($muestra, $cartasMismoPalo[1]);
+                } else {
+                    $puntosEnvidoJugadores[$jugador - 1] = max($puntos) + 0;
+                }
+
+
+            }
+
+            $this->tantosEnvidoJugadores = json_encode($puntosEnvidoJugadores);
+        }
+        //App::abort("No implementado los puntos de envido.");
+    }
+
+    /**
+     * Convierte el array de cartas (int) a un array de clases de Carta
+     *
+     * @param array $cartas
+     * @return array
+     */
+    private function intToCarta($cartas)
+    {
+        return array(
+            Carta::find($cartas[0]),
+            Carta::find($cartas[1]),
+            Carta::find($cartas[2])
+        );
+    }
+
+    /**
+     * @param Carta $muestra
+     * @param array $cartas
+     * @return bool
+     */
+    private function unaEsMuestraArray(Carta $muestra, $cartas)
+    {
+        return $this->unaEsMuestra($muestra, $cartas[0], $cartas[1], $cartas[2]);
+    }
+
+    /**
+     * Devuelve un array con las cartas del mismo palo
+     *
+     * @param $cartas
+     * @return array
+     */
+    private function dosMismoPaloArray($cartas)
+    {
+        if ($cartas[0]->palo == $cartas[1]->palo) {
+            return array($cartas[0], $cartas[1]);
+        } elseif ($cartas[0]->palo == $cartas[2]->palo) {
+            return array($cartas[0], $cartas[2]);
+        } elseif ($cartas[1]->palo == $cartas[2]->palo) {
+            return array($cartas[1], $cartas[2]);
+        }
     }
 
     /**
@@ -372,7 +492,7 @@ class Mano extends Model
                 if ($this->ronda2_id == NULL) {
                     if ($this->ronda1_id == NULL) {
                         //Devolver la utima ronda de la mano anterior
-                       // Ronda::whereGameId($this->gameId)->latest();
+                        // Ronda::whereGameId($this->gameId)->latest();
                         return null;
                     } else {
                         return Ronda::find($this->ronda1_id);
@@ -387,26 +507,15 @@ class Mano extends Model
     }
 
     /**
-     * Para preguntar sie l jugador tiene la palabra o no.
-     *
-     * @param int $used_id
-     * @return bool Si el jugador tiene la palabra o no
-     */
-    public function tieneLaPalabra($user_pos){
-
-        //throw new Exception('Not implemented');
-        return ($this->tieneLaPalabra == null) || $this->tieneLaPalabra == $user_pos%2; //Palabra por grupo
-    }
-
-    /**
      * Las precondiciones tienen que ser satisfechas para entrar a estos métodos.
      *
      * @param int $user_pos
      * @return bool
      */
-    public function gritarEnvido($user_pos){
+    public function gritarEnvido($user_pos)
+    {
         //App::abort(201,"'tieneLaPalabra': Not fully implemented");
-        if(!$this->alguienTieneFlor) {
+        if (!$this->alguienTieneFlor) {
             if ($this->puntosEnvido != null) {
                 if ($this->noQuisoEnvido == null) {
                     $this->puntosEnvido += 2; //Suma dos puntos de envido a lo que hay ahi.
@@ -420,36 +529,13 @@ class Mano extends Model
     }
 
     /**
-     * Las precondiciones tienen que ser satisfechas para entrar a estos métodos
-     * Hace todo lo necesario para dar por querido el envido
-     * ¿¿¿¿¿Tiene que ser el mano???????
-     *
      * @param int $user_pos
      * @return bool
      */
-    public function quererEnvido($user_pos){
-        if($this->puntosEnvido > 0){
-            if($this->tieneLaPalabra($user_pos)){
-                if($this->noQuisoEnvido == null && $this->ganadorEnvido==null){
-                    $envidos = json_decode($this->tantosEnvidoJugadores);
-                    $ganadorEnvido = 1 + array_search(max($envidos), $envidos);
-                    $this->ganadorEnvido = $ganadorEnvido;
-                    $this->quiereEnvido = $user_pos;
-
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param int $user_pos
-     * @return bool
-     */
-    public function gritarTruco($user_pos){
-        if($this->noQuisoTruco == null) {
-            if ($this->puntosTruco==0) { //No fue gritado antes y tampoco el re o el vale cuatro
+    public function gritarTruco($user_pos)
+    {
+        if ($this->noQuisoTruco == null) {
+            if ($this->puntosTruco == 0) { //No fue gritado antes y tampoco el re o el vale cuatro
                 $this->puntosTruco = 2; //Suma dos puntos de truco
                 $this->tieneLaPalabra = ($user_pos + 1) % 2;
                 return true;
@@ -462,12 +548,13 @@ class Mano extends Model
      * @param int $user_pos
      * @return bool
      */
-    public function gritarFlor($user_pos){
-        if($this->tieneFlor($user_pos)) {
+    public function gritarFlor($user_pos)
+    {
+        if ($this->tieneFlor($user_pos)) {
             $flores = json_decode($this->flores);
-            $flores[$user_pos-1] = true; //Le da true al array de flores
+            $flores[$user_pos - 1] = true; //Le da true al array de flores
             $this->flores = json_encode($flores);
-            $this->puntosEnvido=null;
+            $this->puntosEnvido = null;
             return true;
         }
         return false;
@@ -477,22 +564,9 @@ class Mano extends Model
      * @param int $user_pos
      * @return bool
      */
-    public function noQuererEnvido($user_pos){
-        if($this->noQuisoEnvido==null){
-            $this->puntosEnvido /= 2;
-            $this->tieneLaPalabra = null;
-            $this->noQuisoEnvido = $user_pos;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param int $user_pos
-     * @return bool
-     */
-    public function noQuererTruco($user_pos){
-        if($this->noQuisoTruco==null){
+    public function noQuererTruco($user_pos)
+    {
+        if ($this->noQuisoTruco == null) {
             $this->puntosTruco /= 2;
             $this->tieneLaPalabra = null;
             $this->noQuisoTruco = $user_pos;
@@ -506,7 +580,8 @@ class Mano extends Model
      * @param Mano $mano
      * @return array Puntos a sumar Nosotros y ellos
      */
-    public function resolverGanadorMano(){
+    public function resolverGanadorMano()
+    {
         /*
          *
          */
@@ -530,110 +605,17 @@ class Mano extends Model
          *    111 = sum(3) || g 1
          */
         $sum = 0;
-        foreach($rondas as $ronda){
+        foreach ($rondas as $ronda) {
             $sum += ($ronda->ganador) % 2; //Modulo del ganador es 0 ó 1
         }
 
         //TODO: Que sume los puntos de los gritos
-        if($sum >= 2){//Gana el equipo 2,4,6
+        if ($sum >= 2) {//Gana el equipo 2,4,6
             $retorno['e'] = 1;//Punto por haber ganado la mano
-        }else{ //Gana el equipo 1,3,5
+        } else { //Gana el equipo 1,3,5
             $retorno['n'] = 1; //Punto por haber ganado la mano
         }
-    }
 
-    /**
-     * Convierte el array de cartas (int) a un array de clases de Carta
-     *
-     * @param array $cartas
-     * @return array
-     */
-    private function intToCarta($cartas){
-        return array(
-            Carta::find($cartas[0]),
-            Carta::find($cartas[1]),
-            Carta::find($cartas[2])
-        );
-    }
-
-    private function calcularPuntosEnvido()
-    {
-        if(!$this->alguienTieneFlor){
-            $muestra = Carta::find($this->muestra);
-
-            $puntosEnvidoJugadores = array(
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
-            );
-
-            for($jugador=1;$jugador<=$this->cantJugadores;$jugador++){
-                $cartas = $this->cartasDe($jugador);
-                if($cartas[0] == null){
-                    break;
-                }
-                $cartas = $this->intToCarta($cartas);
-                $puntos = array(
-                    $this->puntosCarta($muestra, $cartas[0]),
-                    $this->puntosCarta($muestra, $cartas[1]),
-                    $this->puntosCarta($muestra, $cartas[2]),
-                );
-
-                if($this->unaEsMuestraArray($muestra,$cartas)) {
-                    //De acá agarramos las dos más grandes y las sumamos
-                    //Primero borramos el mínimo
-                    $puntos[array_search(min($puntos), $puntos)] = 0;
-                    $puntosEnvidoJugadores[$jugador-1] = array_sum($puntos);
-                }elseif($this->dosMismoPalo($cartas[0], $cartas[1], $cartas[2])){
-                    $cartasMismoPalo = $this->dosMismoPaloArray($cartas);
-                    $puntosEnvidoJugadores[$jugador-1] = 20
-                        + $this->puntosCarta($muestra,$cartasMismoPalo[0])
-                        + $this->puntosCarta($muestra,$cartasMismoPalo[1]);
-                }else{
-                    $puntosEnvidoJugadores[$jugador-1] = max($puntos)+0;
-                }
-
-
-
-            }
-
-            $this->tantosEnvidoJugadores = json_encode($puntosEnvidoJugadores);
-        }
-        //App::abort("No implementado los puntos de envido.");
-    }
-
-    /**
-     * Devuelve un array con las cartas del mismo palo
-     *
-     * @param $cartas
-     * @return array
-     */
-    private function dosMismoPaloArray($cartas)
-    {
-        if($cartas[0]->palo == $cartas[1]->palo){
-            return array($cartas[0],$cartas[1]);
-        }elseif($cartas[0]->palo == $cartas[2]->palo){
-            return array($cartas[0],$cartas[2]);
-        }elseif($cartas[1]->palo == $cartas[2]->palo){
-            return array($cartas[1],$cartas[2]);
-        }
-    }
-
-    /**
-     * Se fija si alguno de los jugadores (de los que estan jugando), tiene flor
-     *
-     * @return bool
-     */
-    private function alguienTieneFlor(){
-        for($jugador = 1; $jugador<=$this->cantJugadores; $jugador++){
-            if($this->tieneFlor($jugador)){
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -646,14 +628,52 @@ class Mano extends Model
      */
     public function querer($user_pos)
     {
-        if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
+        if ($this->noQuisoEnvido == null && $this->quiereEnvido == 0) {
             //significa que se podría querer el envido (ahora verificar que se gritó
-            if($this->puntosEnvido>0){
+            if ($this->puntosEnvido > 0) {
                 return $this->quererEnvido($user_pos);
-            }else{//Esto significa que nadie gritó envido
+            } else {//Esto significa que nadie gritó envido
                 return false;
             }
         }
+    }
+
+    /**
+     * Las precondiciones tienen que ser satisfechas para entrar a estos métodos
+     * Hace todo lo necesario para dar por querido el envido
+     * ¿¿¿¿¿Tiene que ser el mano???????
+     *
+     * @param int $user_pos
+     * @return bool
+     */
+    public function quererEnvido($user_pos)
+    {
+        if ($this->puntosEnvido > 0) {
+            if ($this->tieneLaPalabra($user_pos)) {
+                if ($this->noQuisoEnvido == null && $this->ganadorEnvido == null) {
+                    $envidos = json_decode($this->tantosEnvidoJugadores);
+                    $ganadorEnvido = 1 + array_search(max($envidos), $envidos);
+                    $this->ganadorEnvido = $ganadorEnvido;
+                    $this->quiereEnvido = $user_pos;
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Para preguntar sie l jugador tiene la palabra o no.
+     *
+     * @param int $used_id
+     * @return bool Si el jugador tiene la palabra o no
+     */
+    public function tieneLaPalabra($user_pos)
+    {
+
+        //throw new Exception('Not implemented');
+        return ($this->tieneLaPalabra == null) || $this->tieneLaPalabra == $user_pos % 2; //Palabra por grupo
     }
 
     /**
@@ -664,10 +684,10 @@ class Mano extends Model
      */
     public function seTieneQueQuererEnvido($playerPos)
     {
-        if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
+        if ($this->noQuisoEnvido == null && $this->quiereEnvido == 0) {
             //significa que se podría querer el envido (ahora verificar que se gritó
-            if($this->puntosEnvido>0){
-                if($this->tieneLaPalabra($playerPos)) {
+            if ($this->puntosEnvido > 0) {
+                if ($this->tieneLaPalabra($playerPos)) {
                     return true;
                 }
             }
@@ -678,13 +698,28 @@ class Mano extends Model
     public function noQuerer($user_pos)
     {
 
-        if($this->noQuisoEnvido==null && $this->quiereEnvido == 0){
+        if ($this->noQuisoEnvido == null && $this->quiereEnvido == 0) {
             //significa que se podría querer el envido (ahora verificar que se gritó
-            if($this->puntosEnvido>0){
+            if ($this->puntosEnvido > 0) {
                 return $this->noQuererEnvido($user_pos);
-            }else{//Esto significa que nadie gritó envido
+            } else {//Esto significa que nadie gritó envido
                 return false;
             }
         }
+    }
+
+    /**
+     * @param int $user_pos
+     * @return bool
+     */
+    public function noQuererEnvido($user_pos)
+    {
+        if ($this->noQuisoEnvido == null) {
+            $this->puntosEnvido /= 2;
+            $this->tieneLaPalabra = null;
+            $this->noQuisoEnvido = $user_pos;
+            return true;
+        }
+        return false;
     }
 } 

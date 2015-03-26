@@ -131,10 +131,11 @@ class GameController extends BaseTrucoController
                                         //Ya no hay más rondas por jugar
                                         //FIXME: Primer ronda empate? [Agregar una ronda dummy si la primera es empate?]
                                         $mano->resolverGanadorMano();
-                                       /* $game->turnoRepartir++;
-                                        if ($game->turnoRepartir > $game->cantJugadores) {
-                                            $game->turnoRepartir = 1;
-                                        }*/
+                                        /* $game->turnoRepartir++;
+                                         if ($game->turnoRepartir > $game->cantJugadores) {
+                                             $game->turnoRepartir = 1;
+                                         }*/
+
                                         $game->seDebeRepartir = true;
                                         $game->manoId = null;
                                         $game->save();
@@ -215,16 +216,16 @@ class GameController extends BaseTrucoController
                      * Hacemos un swap de los puntos para que sean correctos según la
                      * posición en que estan sentados cada uno.
                      */
-                    if($playerPos%2 == 1){
+                    if ($playerPos % 2 == 1) {
                         $tmp = $gameData['puntosN'];
                         $gameData['puntosN'] = $gameData['puntosE'];
                         $gameData['puntosE'] = $tmp;
                     }
 
-                    if($game->manoId == null) {//Todavia no se repartieron las cartas
-                       //Vamos a devolver la mano anterior para que todos la vean.
-                        $mano = Mano::where("gameId",'=',$game->id)->latest()->first();
-                    }else{
+                    if ($game->manoId == null) {//Todavia no se repartieron las cartas
+                        //Vamos a devolver la mano anterior para que todos la vean.
+                        $mano = Mano::where("gameId", '=', $game->id)->latest()->first();
+                    } else {
                         $mano = Mano::find($game->manoId);
                     }
                     $ronda = $mano->ultimaRonda($date);
@@ -254,7 +255,7 @@ class GameController extends BaseTrucoController
                      * Verifica los gritos que hay y los pone en la respuesta
                      * solo si el jugador tiene que aceptarlos.
                      */
-                    $gameData['seTieneQueQuererEvido']=$mano->seTieneQueQuererEnvido($playerPos);
+                    $gameData['seTieneQueQuererEvido'] = $mano->seTieneQueQuererEnvido($playerPos);
 
                     return Response::json($gameData);
                 } else {
@@ -267,18 +268,6 @@ class GameController extends BaseTrucoController
             return Response::json($this->getError(3));
         }
         return Response::json($this->getError());
-    }
-
-    /**
-     * Hace un swap de las variables
-     *
-     * @param $x
-     * @param $y
-     */
-    private function swap(&$x,&$y) {
-        $tmp=$x;
-        $x=$y;
-        $y=$tmp;
     }
 
     public function returnGamesList()
@@ -458,5 +447,18 @@ class GameController extends BaseTrucoController
             return Response::json($this->getError(3));
         }
 
+    }
+
+    /**
+     * Hace un swap de las variables
+     *
+     * @param $x
+     * @param $y
+     */
+    private function swap(&$x, &$y)
+    {
+        $tmp = $x;
+        $x = $y;
+        $y = $tmp;
     }
 } 

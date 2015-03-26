@@ -6,7 +6,7 @@ use Illuminate\Database\Query\Builder;
 
 /**
  * Created by PhpStorm.
- * 
+ *
  * User: Joaquin
  * Date: 17.07.14
  * Time: 16:37
@@ -21,11 +21,12 @@ use Illuminate\Database\Query\Builder;
  * @property \Carbon\Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\Carta whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Carta whereUpdatedAt($value)
- * @method static \App\Carta find($id,$columns = array('*'))
+ * @method static \App\Carta find($id, $columns = array('*'))
  * @method static Builder where($column, $operator = null, $value = null, $boolean = 'and')
  * @method static Builder whereRaw($sql, array $bindings = array(), $boolean = 'and')
  */
-class Carta extends Model {
+class Carta extends Model
+{
 
     /**
      * @var string

@@ -17,7 +17,7 @@
  * @method static \Illuminate\Database\Query\Builder|\User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\User wherePassword($value)
  * @method static \Illuminate\Database\Query\Builder|\User whereRememberToken($value)
- * @method static \User find($id,$columns)
+ * @method static \User find($id, $columns)
  */
 
 use Illuminate\Auth\Authenticatable;
@@ -26,7 +26,8 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+{
     use Authenticatable, CanResetPassword;
     /**
      * The database table used by the model.
@@ -45,5 +46,5 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token','created_at','updated_at'];
+    protected $hidden = ['password', 'remember_token', 'created_at', 'updated_at'];
 }

@@ -2,7 +2,8 @@
 namespace App\Http\Controllers;
 //use App\Http\Controllers\BaseTrucoController;
 
-class WelcomeController extends BaseTrucoController {
+class WelcomeController extends BaseTrucoController
+{
 
     /*
     |--------------------------------------------------------------------------

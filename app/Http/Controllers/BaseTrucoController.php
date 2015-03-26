@@ -7,30 +7,15 @@ class BaseTrucoController extends Controlador
 {
 
     /**
-     * Setup the layout used by the controller.
-     *
-     * @return void
-     */
-    protected function setupLayout()
-    {
-        if (!is_null($this->layout)) {
-            $this->layout = View::make($this->layout);
-        }
-    }
-
-    /**
      * @param mixed $error
      * @return Error
      */
-    public function getError($error=0){
-        if(is_numeric($error)){
+    public function getError($error = 0)
+    {
+        if (is_numeric($error)) {
             return $this->getErrorNumber($error);
         }
         return new Error($error);
-    }
-
-    public function info($message){
-        return array("info"=>$message);
     }
 
     public function getErrorNumber($error)
@@ -49,17 +34,34 @@ class BaseTrucoController extends Controlador
             case 6:
                 return new Error(6, "Datos de usuario inválidos.");
             case 7:
-                return new Error(7,"La sala esta llena o el usuario ya esta en ella.");
+                return new Error(7, "La sala esta llena o el usuario ya esta en ella.");
             case 8:
-                return new Error(8,"Esta carta ya fué tirada.");
+                return new Error(8, "Esta carta ya fué tirada.");
             case 9:
-                return new Error(9,"El jugador ya tiró una carta.");
+                return new Error(9, "El jugador ya tiró una carta.");
             case 10:
-                return new Error(10,"No es el turno del jugador.");
+                return new Error(10, "No es el turno del jugador.");
             case 11:
-                return new Error(11,"No se deben repartir las cartas.");
+                return new Error(11, "No se deben repartir las cartas.");
             default:
                 return new Error(0, "Error!");
+        }
+    }
+
+    public function info($message)
+    {
+        return array("info" => $message);
+    }
+
+    /**
+     * Setup the layout used by the controller.
+     *
+     * @return void
+     */
+    protected function setupLayout()
+    {
+        if (!is_null($this->layout)) {
+            $this->layout = View::make($this->layout);
         }
     }
 

@@ -28,7 +28,7 @@ Route::get('login', array('uses' => 'AuthController@showLogin'));
 // route to process the form
 Route::get('loginGet', array('uses' => 'AuthController@auth'));
 
-Route::get('logout','AuthController@doLogout');
+Route::get('logout', 'AuthController@doLogout');
 
 Route::get('register', function () {
     $user = new User();
@@ -39,11 +39,11 @@ Route::get('register', function () {
     return "Registrado";
 });
 
-Route::get("carbonTest/{date1}/{date2}",function ($date1, $date2){
+Route::get("carbonTest/{date1}/{date2}", function ($date1, $date2) {
     $date = new \Carbon\Carbon($date1);
     $updated = new \Carbon\Carbon($date2);
 
-    return $date->diffInSeconds($updated,false);
+    return $date->diffInSeconds($updated, false);
 });
 
 

@@ -6,7 +6,7 @@ use App\Carta;
 
 /**
  * Created by PhpStorm.
- * 
+ *
  * User: Joaquin
  * Date: 17.07.14
  * Time: 16:37
@@ -39,17 +39,19 @@ use App\Carta;
  * @method static \Illuminate\Database\Query\Builder|\Ronda whereGanador($value)
  * @method static \Illuminate\Database\Query\Builder|\Ronda whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Ronda whereUpdatedAt($value)
- * @method static \App\Ronda find($id,$columns = array('*'))
+ * @method static \App\Ronda find($id, $columns = array('*'))
  */
-class Ronda extends Model {
+class Ronda extends Model
+{
 
     /**
      * @var string
      */
     protected $table = "rondas";
 
-    public function noTiroCarta($pos){
-        $str = "carta_jugador".$pos;
+    public function noTiroCarta($pos)
+    {
+        $str = "carta_jugador" . $pos;
         return $this->$str == NULL;
     }
 
