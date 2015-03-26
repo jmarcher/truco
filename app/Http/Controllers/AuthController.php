@@ -10,14 +10,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Input;
 use Auth;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 
 class AuthController extends Controlador

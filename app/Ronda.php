@@ -2,7 +2,6 @@
 
 
 use Illuminate\Database\Eloquent\Model;
-use App\Carta;
 
 /**
  * Created by PhpStorm.

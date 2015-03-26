@@ -15,11 +15,9 @@ use App\Http\Requests;
 use App\Mano;
 use App\Ronda;
 use App\User;
-
 use Auth;
-use \Illuminate\Support\Facades\Response;
-use \Illuminate\Database\Eloquent\ModelNotFoundException;
-use PhpSpec\Exception\Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Response;
 
 
 class GameController extends BaseTrucoController
