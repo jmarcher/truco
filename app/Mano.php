@@ -376,6 +376,7 @@ class Mano extends Model
 
             }
 
+            $this->ganadorEnvido = array_search(max($puntosEnvidoJugadores), $puntosEnvidoJugadores)+1;
             $this->tantosEnvidoJugadores = json_encode($puntosEnvidoJugadores);
         }
         //App::abort("No implementado los puntos de envido.");
@@ -616,6 +617,19 @@ class Mano extends Model
             $retorno['n'] = 1; //Punto por haber ganado la mano
         }
 
+        //Puntos de envido.
+        if($this->noQuisoEnvido != null && $this->noQuisoEnvido%2 == 0){
+            $retorno['n'] += $this->puntosEnvido;
+        }elseif($this->noQuisoEnvido != null && $this->noQuisoEnvido%2 == 1){
+            $retorno['e'] += $this->puntosEnvido;
+        }
+        if($this->quiereEnvido != 0){ //Alguien quiso envido
+            if($this->ganadorEnvido%2 == 0){
+                $retorno['e'] += $this->puntosEnvido;
+            }else{
+                $retorno['n'] += $this->puntosEnvido;
+            }
+        }
     }
 
     /**

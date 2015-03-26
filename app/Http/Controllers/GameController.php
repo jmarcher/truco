@@ -130,11 +130,10 @@ class GameController extends BaseTrucoController
                                     if (!$mano->asignarRonda($nuevaRonda->id)) {
                                         //Ya no hay más rondas por jugar
                                         //FIXME: Primer ronda empate? [Agregar una ronda dummy si la primera es empate?]
-                                        $mano->resolverGanadorMano();
-                                        /* $game->turnoRepartir++;
-                                         if ($game->turnoRepartir > $game->cantJugadores) {
-                                             $game->turnoRepartir = 1;
-                                         }*/
+                                        $puntos = $mano->resolverGanadorMano();
+                                        //Suma los puntos que devuelve la ronda
+                                        $game->puntosN += $puntos['n'];
+                                        $game->puntosE += $puntos['e'];
 
                                         $game->seDebeRepartir = true;
                                         $game->manoId = null;
