@@ -1,36 +1,34 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class UpdateManosAddRondas extends Migration {
-
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-        Schema::table("manos", function(Blueprint $table) {
-            $table->integer("ronda1_id")->nullable()->default(null)->unsigned();
+class UpdateManosAddRondas extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('manos', function (Blueprint $table) {
+            $table->integer('ronda1_id')->nullable()->default(null)->unsigned();
             $table->foreign('ronda1_id')->references('id')->on('rondas')->onDelete('no action')->onUpdate('no action');
-            $table->integer("ronda2_id")->nullable()->default(null)->unsigned();
+            $table->integer('ronda2_id')->nullable()->default(null)->unsigned();
             $table->foreign('ronda2_id')->references('id')->on('rondas')->onDelete('no action')->onUpdate('no action');
-            $table->integer("ronda3_id")->nullable()->default(null)->unsigned();
+            $table->integer('ronda3_id')->nullable()->default(null)->unsigned();
             $table->foreign('ronda3_id')->references('id')->on('rondas')->onDelete('no action')->onUpdate('no action');
-
-
         });
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{/*
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {/*
         Schema::table("manos", function(Blueprint $table) {
 
 /*
@@ -42,6 +40,5 @@ class UpdateManosAddRondas extends Migration {
             $table->dropForeign('ronda2_id');
             $table->dropForeign('ronda3_id');
         });*/
-	}
-
+    }
 }

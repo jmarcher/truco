@@ -3,13 +3,13 @@
  * Created by PhpStorm.
  * User: Joaquin
  * Date: 14.07.14
- * Time: 19:53
+ * Time: 19:53.
  */
 
 //namespace App\Http\Controllers;
+
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Support\Facades\Input;
@@ -17,21 +17,18 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-
 class AuthController extends Controlador
 {
-
     use AuthenticatesAndRegistersUsers;
-
 
     public function auth()
     {
 
         // validate the info, create rules for the inputs
-        $rules = array(
-            'email' => 'required|email', // make sure the email is an actual email
-            'password' => 'required|alphaNum|min:3' // password can only be alphanumeric and has to be greater than 3 characters
-        );
+        $rules = [
+            'email'    => 'required|email', // make sure the email is an actual email
+            'password' => 'required|alphaNum|min:3', // password can only be alphanumeric and has to be greater than 3 characters
+        ];
 
         // run the validation rules on the inputs from the form
         $validator = Validator::make(Input::all(), $rules);
@@ -45,14 +42,15 @@ class AuthController extends Controlador
         } else {
 
             // create our user data for the authentication
-            $userdata = array(
-                'email' => Input::get('email'),
-                'password' => Input::get('password')
-            );
+            $userdata = [
+                'email'    => Input::get('email'),
+                'password' => Input::get('password'),
+            ];
 
             // attempt to do the login
-            if (Auth::check())
-                return Response::json(array("logged_in" => false));
+            if (Auth::check()) {
+                return Response::json(['logged_in' => false]);
+            }
             //dd($userdata);
             if (Auth::attempt($userdata)) {
 
@@ -60,16 +58,13 @@ class AuthController extends Controlador
                 // redirect them to the secure section or whatever
                 // return Redirect::to('secure');
                 // for now we'll just echo success (even though echoing in a controller is bad)=
-                return Response::json(array("logged_in" => true));
-
+                return Response::json(['logged_in' => true]);
             } else {
 
                 // validation not successful, send back to form
-                return Response::json(array("logged_in" => false));/* ->withErrors($validator) // send back all errors to the login form
-                    ->withInput(Input::except('password'));*/;
-
+                return Response::json(['logged_in' => false]); /* ->withErrors($validator) // send back all errors to the login form
+                    ->withInput(Input::except('password'));*/
             }
-
         }
     }
 
@@ -81,6 +76,6 @@ class AuthController extends Controlador
 
     public function showLogin()
     {
-        return View::make("loginForm");
+        return View::make('loginForm');
     }
-} 
+}

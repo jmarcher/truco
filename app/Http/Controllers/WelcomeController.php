@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
+
 //use App\Http\Controllers\BaseTrucoController;
 
 class WelcomeController extends BaseTrucoController
 {
-
     /*
     |--------------------------------------------------------------------------
     | Welcome Controller
@@ -35,5 +36,4 @@ class WelcomeController extends BaseTrucoController
     {
         return view('welcome');
     }
-
 }

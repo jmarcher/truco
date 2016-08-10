@@ -1,5 +1,8 @@
-<?php namespace App\Http\Controllers;
-/**
+<?php
+
+namespace App\Http\Controllers;
+
+/*
  * Created by PhpStorm.
  * User: Joaquin
  * Date: 14.07.14
@@ -11,7 +14,6 @@
 
 //Models
 use App\Game;
-use App\Http\Requests;
 use App\Mano;
 use App\Ronda;
 use App\User;
@@ -19,10 +21,8 @@ use Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Response;
 
-
 class GameController extends BaseTrucoController
 {
-
     public function startGame()
     {
         //Debugbar::error('Error!');
@@ -43,7 +43,8 @@ class GameController extends BaseTrucoController
         $partida->save();
 
         debug($partida);
-        return Response::json(array("partida" => array("id" => $partida['id'])));
+
+        return Response::json(['partida' => ['id' => $partida['id']]]);
     }
 
     public function joinGame($id, $password = null)
@@ -51,7 +52,7 @@ class GameController extends BaseTrucoController
         try {
             $game = Game::findOrFail($id);
             if ($game->perteneceJugador(Auth::id())) {
-                return Response::json(array("id" => $game->id));
+                return Response::json(['id' => $game->id]);
             }
             if ($game->validPassword($password)) {
                 $pos = $game->insertPlayer(Auth::id());
@@ -60,7 +61,8 @@ class GameController extends BaseTrucoController
                         $game->seDebeRepartir = true; //Ahora marcamos para que se puedan repartir las cartas
                     }
                     $game->save();
-                    return Response::json(array("id" => $game->id));
+
+                    return Response::json(['id' => $game->id]);
                 } else {
                     return Response::json($this->getError(4));
                 }
@@ -70,13 +72,14 @@ class GameController extends BaseTrucoController
         } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
-        return Response::json($this->getError());
 
+        return Response::json($this->getError());
     }
 
     /**
      * @param $id Id de la partida
      * @param $cartaId Lugar de la carta:  A;B;C
+     *
      * @return \Illuminate\Http\JsonResponse|null
      */
     public function ponerCarta($id, $cartaId)
@@ -98,11 +101,11 @@ class GameController extends BaseTrucoController
                     if ($mano->tieneCarta($posicion, $cartaId)) {
                         if ($ronda->noTiroCarta($posicion)) {//Verifico que no tiró una carta ya
                             if ($mano->turno == $posicion) {//Verifico que sea el turno
-                                $strMano = "carta_" . $cartaId . "_jugador" . $posicion;
-                                $strRondaJug = "carta_jugador" . $posicion;
+                                $strMano = 'carta_'.$cartaId.'_jugador'.$posicion;
+                                $strRondaJug = 'carta_jugador'.$posicion;
                                 $carta = $mano->$strMano;
                                 $ronda->$strRondaJug = $carta;
-                                $mano->$strMano = NULL;
+                                $mano->$strMano = null;
                                 if ($game->cantJugadores == $posicion) {
                                     $mano->turno = 1;
                                 } else {
@@ -132,6 +135,7 @@ class GameController extends BaseTrucoController
                                 }
                                 $mano->save();
                                 $ronda->save();
+
                                 return $this->returnGameData($gameId);
                             } else {
                                 return Response::json($this->getError(10));
@@ -142,7 +146,6 @@ class GameController extends BaseTrucoController
                     } else {
                         return Response::json($this->getError(8));
                     }
-
                 } else {
                     return Response::json($this->getError(5));
                 }
@@ -152,12 +155,12 @@ class GameController extends BaseTrucoController
         } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
-        return null;
     }
 
     /**
      * @param $id
      * @param null $date
+     *
      * @return mixed
      */
     public function returnGameData($id, $date = null)
@@ -171,7 +174,7 @@ class GameController extends BaseTrucoController
             $game = Game::findOrFail($id);
             if ($game->perteneceJugador(Auth::id())) {
                 $gameData = $game;
-                if ($date == "undefined") {
+                if ($date == 'undefined') {
                     $date = null;
                 }
                 if ($date != null) {
@@ -179,9 +182,9 @@ class GameController extends BaseTrucoController
                 }
                 if ($game->seDebeRepartir && !$game->partidaIniciada()) {//aca si ya se empezó el juego se tienen que mostrar las cartas
                     if ($game->playerPosition(Auth::id()) == $game->turnoRepartir) {
-                        return Response::json(array("repartir" => true));
+                        return Response::json(['repartir' => true]);
                     } else {
-                        return Response::json($this->info("Esperando que se repartan las cartas."));
+                        return Response::json($this->info('Esperando que se repartan las cartas.'));
                     }
                 }
                 if ($game->partidaIniciada()) {
@@ -201,7 +204,7 @@ class GameController extends BaseTrucoController
 
                     $playerPos = $game->playerPosition(Auth::id());
 
-                    /**
+                    /*
                      * Hacemos un swap de los puntos para que sean correctos según la
                      * posición en que estan sentados cada uno.
                      */
@@ -213,7 +216,7 @@ class GameController extends BaseTrucoController
 
                     if ($game->manoId == null) {//Todavia no se repartieron las cartas
                         //Vamos a devolver la mano anterior para que todos la vean.
-                        $mano = Mano::where("gameId", '=', $game->id)->latest()->first();
+                        $mano = Mano::where('gameId', '=', $game->id)->latest()->first();
                     } else {
                         $mano = Mano::find($game->manoId);
                     }
@@ -222,7 +225,7 @@ class GameController extends BaseTrucoController
                         $gameData['turno'] = true;
                     }
                     $gameData['cartasEnMano'] = $mano->cartasDe($playerPos);
-                    $gameData['cartasEnMesa'] = array(
+                    $gameData['cartasEnMesa'] = [
                         $ronda->carta_jugador1,
                         $ronda->carta_jugador2,
                         $ronda->carta_jugador3,
@@ -230,14 +233,14 @@ class GameController extends BaseTrucoController
                         $ronda->carta_jugador5,
                         $ronda->carta_jugador6,
 
-                    );//todo: depende de la ronda
+                    ]; //todo: depende de la ronda
 
                     if ($ronda->ganador != 0) {//Esto significa que alguien ganó
                         $gameData['ganador'] = $ronda->ganador;
                     }
 
                     $gameData['muestra'] = $mano->muestra;
-                    $gameData['updated'] = $mano->updated_at . "";
+                    $gameData['updated'] = $mano->updated_at.'';
 
 
                     /*
@@ -248,7 +251,7 @@ class GameController extends BaseTrucoController
 
                     return Response::json($gameData);
                 } else {
-                    return Response::json($this->info("Esperando más jugadores."));
+                    return Response::json($this->info('Esperando más jugadores.'));
                 }
             } else {
                 return Response::json($this->getError(4));
@@ -256,6 +259,7 @@ class GameController extends BaseTrucoController
         } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
+
         return Response::json($this->getError());
     }
 
@@ -283,7 +287,7 @@ class GameController extends BaseTrucoController
                     $mano->gameId = $game->id;
                     $mano->cantJugadores = $game->cantJugadores;
                     $mano->crearManoAleatoria();
-                    $mano->turno = $game->playerPosition(Auth::id()) + 1;//Se le asigna al siguiente
+                    $mano->turno = $game->playerPosition(Auth::id()) + 1; //Se le asigna al siguiente
                     if ($mano->turno > $game->cantJugadores) {
                         //Si nos pasamos de la cantidad de jugadores,
                         //tenemos que el turno es del primero
@@ -304,6 +308,7 @@ class GameController extends BaseTrucoController
                     $game->manoId = $mano->id;
                     $game->seDebeRepartir = false;
                     $game->save();
+
                     return $this->returnGameData($id);
                 } else {
                     return Response::json($this->getError(10));
@@ -318,13 +323,14 @@ class GameController extends BaseTrucoController
     }
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $grito
+     *
      * @return null
      */
     public function gritar($id, $grito)
     {
-        /**
+        /*
          * TODO:
          * Verificar que tiene la palabra    OK
          * Pasar la palabra al otro equipo (u otro jugador?) OK
@@ -355,31 +361,29 @@ class GameController extends BaseTrucoController
                 $user_pos = $game->playerPosition(Auth::id());
                 if ($mano->tieneLaPalabra($user_pos)) {
                     switch ($grito) {
-                        case "e": {//envido
+                        case 'e': {//envido
                             $mano->gritarEnvido($user_pos);
                             break;
                         }
-                        case "f": {//flor
+                        case 'f': {//flor
                             $mano->gritarFlor($user_pos);
                             break;
                         }
-                        case "t": {//truco
+                        case 't': {//truco
                             $mano->gritarTruco($user_pos);
                             break;
                         }
                     }
                     $mano->save();
                 } else {
-                    return Response::json($this->info("No tiene la palabra"));
+                    return Response::json($this->info('No tiene la palabra'));
                 }
             } else {
                 return Response::json($this->getError(4));
             }
-
         } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
-        return null;
     }
 
     /**
@@ -397,9 +401,10 @@ class GameController extends BaseTrucoController
                 if ($mano->tieneLaPalabra($user_pos)) {
                     $response = $mano->noQuerer($user_pos);
                     $mano->save();
+
                     return $this->returnGameData($id);
                 } else {
-                    return Response::json($this->info("No tiene la palabra"));
+                    return Response::json($this->info('No tiene la palabra'));
                 }
             } else {
                 return Response::json($this->getError(4));
@@ -410,9 +415,10 @@ class GameController extends BaseTrucoController
     }
 
     /**
-     * Quiere el grito actual, tiene que tener la palabra
+     * Quiere el grito actual, tiene que tener la palabra.
      *
      * @param $id
+     *
      * @return mixed
      */
     public function querer($id)
@@ -425,9 +431,10 @@ class GameController extends BaseTrucoController
                 if ($mano->tieneLaPalabra($user_pos)) {
                     $response = $mano->querer($user_pos);
                     $mano->save();
+
                     return $this->returnGameData($id);
                 } else {
-                    return Response::json($this->info("No tiene la palabra"));
+                    return Response::json($this->info('No tiene la palabra'));
                 }
             } else {
                 return Response::json($this->getError(4));
@@ -435,11 +442,10 @@ class GameController extends BaseTrucoController
         } catch (ModelNotFoundException $model) {
             return Response::json($this->getError(3));
         }
-
     }
 
     /**
-     * Hace un swap de las variables
+     * Hace un swap de las variables.
      *
      * @param $x
      * @param $y
@@ -450,4 +456,4 @@ class GameController extends BaseTrucoController
         $x = $y;
         $y = $tmp;
     }
-} 
+}

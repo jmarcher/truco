@@ -11,7 +11,7 @@
 |
 */
 
-Route::pattern('id', '[0-9]+');//Cualquier parametro llamado "id" tiene que ser numérico
+Route::pattern('id', '[0-9]+'); //Cualquier parametro llamado "id" tiene que ser numérico
 
 
 Route::get('/', 'WelcomeController@index');
@@ -19,27 +19,28 @@ Route::get('home', 'HomeController@index');
 
 
 Route::get('auth/required', function () {
-    return Response::json(array("info" => "Tienes que estar logueado."));
+    return Response::json(['info' => 'Tienes que estar logueado.']);
 });
 
 // route to show the login form
-Route::get('login', array('uses' => 'AuthController@showLogin'));
+Route::get('login', ['uses' => 'AuthController@showLogin']);
 
 // route to process the form
-Route::get('loginGet', array('uses' => 'AuthController@auth'));
+Route::get('loginGet', ['uses' => 'AuthController@auth']);
 
 Route::get('logout', 'AuthController@doLogout');
 
 Route::get('register', function () {
     $user = new User();
-    $user->email = "diego@gmail.com";
-    $user->password = Hash::make("pass");
-    $user->name = "Diego";
+    $user->email = 'diego@gmail.com';
+    $user->password = Hash::make('pass');
+    $user->name = 'Diego';
     $user->save();
-    return "Registrado";
+
+    return 'Registrado';
 });
 
-Route::get("carbonTest/{date1}/{date2}", function ($date1, $date2) {
+Route::get('carbonTest/{date1}/{date2}', function ($date1, $date2) {
     $date = new \Carbon\Carbon($date1);
     $updated = new \Carbon\Carbon($date2);
 
@@ -47,7 +48,7 @@ Route::get("carbonTest/{date1}/{date2}", function ($date1, $date2) {
 });
 
 
-Route::get("prueba", function () {
+Route::get('prueba', function () {
     $time_start = microtime(true);
     for ($i = 1; $i <= 10000; $i++) {
         $mano = new Mano();
@@ -55,14 +56,15 @@ Route::get("prueba", function () {
     }
     $time_end = microtime(true);
     $time = $time_end - $time_start;
-    return "Esto paso en: " . $time . " segundos.";
+
+    return 'Esto paso en: '.$time.' segundos.';
 });
 
 
 //LAS RUTAS DE ARRIBA SON DE PRUEBA
 
 //LOGIN
-Route::post('loginService', array('uses' => 'AuthController@auth'));
+Route::post('loginService', ['uses' => 'AuthController@auth']);
 
 /*
  * Game Routes

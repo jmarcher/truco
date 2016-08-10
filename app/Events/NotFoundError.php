@@ -1,10 +1,11 @@
-<?php namespace App\Events;
+<?php
+
+namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
 
 class NotFoundError extends Event
 {
-
     use SerializesModels;
 
     /**
@@ -16,5 +17,4 @@ class NotFoundError extends Event
     {
         //
     }
-
 }

@@ -1,5 +1,6 @@
-<?php namespace App;
+<?php
 
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -11,14 +12,17 @@ use Illuminate\Database\Query\Builder;
  * Date: 17.07.14
  * Time: 16:37
  *
- * @property integer $id
- * @property boolean $numero
+ * @property int $id
+ * @property bool $numero
  * @property string $palo
+ *
  * @method static \Illuminate\Database\Query\Builder|\Carta whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\Carta whereNumero($value)
  * @method static \Illuminate\Database\Query\Builder|\Carta wherePalo($value)
+ *
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ *
  * @method static \Illuminate\Database\Query\Builder|\Carta whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\Carta whereUpdatedAt($value)
  * @method static \App\Carta find($id, $columns = array('*'))
@@ -27,9 +31,8 @@ use Illuminate\Database\Query\Builder;
  */
 class Carta extends Model
 {
-
     /**
      * @var string
      */
-    protected $table = "cartas";
-} 
+    protected $table = 'cartas';
+}
