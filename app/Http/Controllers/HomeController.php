@@ -1,8 +1,9 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 class HomeController extends BaseTrucoController
 {
-
     /*
     |--------------------------------------------------------------------------
     | Home Controller
@@ -33,5 +34,4 @@ class HomeController extends BaseTrucoController
     {
         return view('home');
     }
-
 }

@@ -1,6 +1,8 @@
-<?php namespace App;
+<?php
 
-/**
+namespace App;
+
+/*
  * User
  *
  * @property integer $id

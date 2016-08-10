@@ -1,10 +1,9 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Http\Requests;
+namespace App\Http\Controllers;
 
 class TorneoController extends BaseTrucoController
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +37,8 @@ class TorneoController extends BaseTrucoController
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Response
      */
     public function show($id)
@@ -49,7 +49,8 @@ class TorneoController extends BaseTrucoController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Response
      */
     public function edit($id)
@@ -60,7 +61,8 @@ class TorneoController extends BaseTrucoController
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Response
      */
     public function update($id)
@@ -71,12 +73,12 @@ class TorneoController extends BaseTrucoController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Response
      */
     public function destroy($id)
     {
         //
     }
-
 }

@@ -1,27 +1,25 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class PartidaGamefield extends Migration {
-
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-        Schema::create("cartas", function(Blueprint $table)
-        {
+class PartidaGamefield extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('cartas', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->tinyInteger('numero');
-            $table->enum('palo', array('oro', 'basto','espada', 'copa'));
+            $table->enum('palo', ['oro', 'basto', 'espada', 'copa']);
             $table->timestamps();
         });
-        Schema::create("rondas", function(Blueprint $table)
-        {
+        Schema::create('rondas', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('gameId')->unsigned();
@@ -45,27 +43,23 @@ class PartidaGamefield extends Migration {
             $table->foreign('carta_jugador5')->references('id')->on('cartas')->onDelete('no action')->onUpdate('no action');
             $table->integer('carta_jugador6')->unsigned()->nullable()->default(null);
             $table->foreign('carta_jugador6')->references('id')->on('cartas')->onDelete('no action')->onUpdate('no action');
-
         });
-        Schema::table("games", function($table)
-        {
-            $table->tinyInteger("rondaActual")->default(0);
+        Schema::table('games', function ($table) {
+            $table->tinyInteger('rondaActual')->default(0);
         });
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
         Schema::drop('cartas');
-		Schema::drop("rondas");
-        Schema::table('games', function($table)
-        {
+        Schema::drop('rondas');
+        Schema::table('games', function ($table) {
             $table->dropColumn('rondaActal');
         });
-	}
-
+    }
 }
